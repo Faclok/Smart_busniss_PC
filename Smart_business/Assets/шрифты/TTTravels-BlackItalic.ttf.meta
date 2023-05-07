@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: c2cdf6aaf2873fe498f84aeea8f4ca8a
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - TT Travels
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a1fce9e59658a6e46a0b834100b71b48, type: 3}
+  - {fileID: 12800000, guid: 4138766dd89af834cb7b90f162f64bca, type: 3}
+  - {fileID: 12800000, guid: 3065809656a627e4a999338536ef6dad, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
