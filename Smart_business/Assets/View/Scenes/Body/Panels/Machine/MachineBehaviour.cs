@@ -34,11 +34,6 @@ namespace Assets.View.Body.Machine
         [SerializeField] private Text _info;
 
         /// <summary>
-        /// Поле для иконки машины
-        /// </summary>
-        [SerializeField] private Image _icon;
-
-        /// <summary>
         /// Объект текущего тела
         /// </summary>
         [HideInInspector] public new GameObject gameObject;
@@ -75,7 +70,6 @@ namespace Assets.View.Body.Machine
         {
             Data = data;
 
-            _icon.sprite = MachineControll.GetIcon(data["icon"]);
             _title.text = data.Name;
 
             if (!data.IsActive)
@@ -93,27 +87,16 @@ namespace Assets.View.Body.Machine
         /// </summary>
         public void Click()
         {
-            if (MachineControll.TypeOpen == TypeOpenMachine.Option)
-                FullScreenPanels.OpenOption(
-                    new OptionProperty(Data.Name,
-                    null,
-                    new ReviewProperty(MachineControll.GetIcon("LastActive"), FuncLoadGraphicAsync, "FIX", "FIX"),
-                    Data["description"],
-                    GetHistoryAsync
-                    ));
-            else
-            {
-                var datas = new ElementData[] { 
-                new ElementData("ID","id",Data["id"],false,int.MaxValue.ToString().Length,true),
-                new ElementData("Name", "name",Data["name"], true,20),
-                new ElementData("Creat", "dataSet", Data.CreatMachineSQL, false,15),
-                new ElementData("Icon", "icon", Data["icon"], true, 60),
-                new ElementData("Описание","description",Data["description"],true, int.MaxValue)
-                };
-                var property = new EditProperty(Data, datas, MachineControll.UpdateDatasOnChangers, MachineControll.IsRoot("delete"));
+            var option = new OptionProperty(Data.Name, null, new ReviewProperty(MachineControll.GetIcon("LastActive"), FuncLoadGraphicAsync, "FIX", "FIX"), Data["description"], GetHistoryAsync);
 
-                FullScreenPanels.OpenEditData(property);
-            }
+            var datas = new ElementData[] { new ElementData("ID","id",Data["id"],false,int.MaxValue.ToString().Length,true), new ElementData("Name", "name",Data["name"], true,20),
+                                            new ElementData("Creat", "dataSet", Data.CreatMachineSQL, false,15),new ElementData("Icon", "icon", Data["icon"], true, 60),
+                                            new ElementData("Описание","description",Data["description"],true, int.MaxValue)};
+
+            var edit = new EditProperty(Data, datas, MachineControll.UpdateDatasOnChangers, MachineControll.IsRoot("delete"));
+
+            FullScreenPanels.OpenEditData(property);
+
         }
 
         private async Task<float[]> FuncLoadGraphicAsync(DateTime start, DateTime end)

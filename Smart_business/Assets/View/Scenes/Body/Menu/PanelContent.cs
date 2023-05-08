@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.View.Body.Menu
@@ -10,6 +9,13 @@ namespace Assets.View.Body.Menu
     /// </summary>
     public class PanelContent : MonoBehaviour, IPanelContent
     {
+
+        [Header("Name")]
+        [SerializeField]
+        private string _title;
+
+        public string Title => _title;
+
         /// <summary>
         /// Зараннее сохранненый объект, ради оптимизации
         /// </summary>

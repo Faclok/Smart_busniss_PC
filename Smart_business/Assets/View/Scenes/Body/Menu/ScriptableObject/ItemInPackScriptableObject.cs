@@ -20,14 +20,9 @@ namespace Assets.View.Body.Menu
         [SerializeField] private string _title;
 
         /// <summary>
-        /// Иконка использюемая в нижней части панели
-        /// </summary>
-        [SerializeField] private Sprite _icon;
-
-        /// <summary>
         /// Отдел
         /// </summary>
-        [SerializeField] private PanelContent _panelConent;
+        [SerializeField] private PanelContent[] _panelConent;
 
         /// <summary>
         /// Свойство и не изменяемое, изменить можно лишь в inspector
@@ -37,11 +32,6 @@ namespace Assets.View.Body.Menu
         /// <summary>
         /// Свойство и не изменяемое, изменить можно лишь в inspector
         /// </summary>
-        public PanelContent Content => _panelConent;
-
-        /// <summary>
-        /// Свойство и не изменяемое, изменить можно лишь в inspector
-        /// </summary>
-        public Sprite Icon => _icon;
+        public PanelContent[] Content => _panelConent;
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.View.Body.Menu;
 using Assets.ViewModel;
-using Assets.View.Body.VioletSearch;
 using MachineData = Assets.ViewModel.Datas.Machine;
 using ItemsLoad = Assets.View.Body.ItemsAnimationLoad.ControllLoadAnimation;
 using Assets.View.Body.FullScreen;
@@ -15,6 +14,7 @@ using System.Linq;
 using Assets.View.Body.FullScreen.CreatWindow;
 using Assets.View.Body.FullScreen.Fields;
 using Assets.View.Body.FullScreen.HistoryWindow;
+using Assets.View.Body.FullScreen.OptionsWindow;
 
 namespace Assets.View.Body.Machine
 {
@@ -40,22 +40,17 @@ namespace Assets.View.Body.Machine
         [SerializeField]
         private Sprite _defaultIcon;
 
-        /// <summary>
-        /// Паттерн Singleton
-        /// </summary>
-        private static MachineControll _singleton;
-
-        /// <summary>
-        /// Панель вехнего управления
-        /// </summary>
-        [Header("Multi panel")]
+        [Header("Panels")]
         [SerializeField]
-        private MultiPanel _multiPanel;
+        private History _history;
+
+        [SerializeField]
+        private Option _option;
 
         /// <summary>
         /// Амитор загрузки объектов
         /// </summary>
-        [Header("Links")]
+        [Header("Items")]
         [SerializeField]
         private ItemsLoad _itemsLoad;
 
@@ -70,8 +65,6 @@ namespace Assets.View.Body.Machine
         /// </summary>
         public const string NameDepartment = "Нагрузка";
 
-        public static TypeOpenMachine TypeOpen { get; private set; } = TypeOpenMachine.Option;
-
         /// <summary>
         /// Имя используется в анализе
         /// </summary>
@@ -80,6 +73,11 @@ namespace Assets.View.Body.Machine
         public static readonly AnalyzeProperty AnalyzeProperty = new(NameDepartment, NameItemDepartment, GetItemDatas);
 
         public static readonly HistoryProperty HistoryProperty = new(NameDepartment,GetHistoryItems);
+
+        /// <summary>
+        /// Паттерн Singleton
+        /// </summary>
+        private static MachineControll _singleton;
 
         /// <summary>
         /// Пробуждение
@@ -91,26 +89,19 @@ namespace Assets.View.Body.Machine
             _singleton = this;
         }
 
-        /// <summary>
-        /// Обновление данных верхнего управления
-        /// </summary>
-        private void UpdateData()
+        private void Start()
         {
-            _multiPanel.UpdateData(ManagementAssistant.AccessAccount[MachineData.TableContains]);
+            _history.Open(HistoryProperty);
         }
 
-        /// <summary>
-        /// Вызывается в кнопке 
-        /// </summary>
-        public void OnAnalyze() => FullScreenPanels.OpenAnalyzeWindow(AnalyzeProperty);
-
-        public void OnHistory() => FullScreenPanels.OpenHistoryData(HistoryProperty);
+        public static void FocusMachine(MachineBehaviour machine, HistoryProperty history, OptionProperty option)
+        {
+            _singleton._history.Open(history);
+            _singleton._option.Open(option);
+        }
 
         public static void UpdateDatasOnChangers()
             => _singleton._verticalMachine.UpdateDatasOnChanger();
-
-        public void OnEdit()
-          =>  TypeOpen = TypeOpen == TypeOpenMachine.Edit ? TypeOpenMachine.Option : TypeOpenMachine.Edit;
 
 
         public void CreatMachine()
@@ -134,8 +125,6 @@ namespace Assets.View.Body.Machine
                 new ElementData("description","description","write description",isEdit:true,countSimbols: 1000, isNumber:false)
             }
             , UpdateDatasOnChangers);
-
-            FullScreenPanels.OpenCreatData(property);
         }
 
         public static async Task<HistoryData[]> GetHistoryItems()
@@ -216,12 +205,5 @@ namespace Assets.View.Body.Machine
         public static bool IsRoot(string root)
             => ManagementAssistant.AccessAccount["machine"].Contains("all") || ManagementAssistant.AccessAccount["machine"].Contains(root);
 
-        private void OnDestroy()
-        {
-            TypeOpen = TypeOpenMachine.Option;
-        }
     }
-
-    public enum TypeOpenMachine
-    { Option, Edit }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Assets.View.Body.FullScreen.HistoryWindow
 {
 
-    public class History : FullScreenPanel<HistoryProperty>
+    public class History : MonoBehaviour
     {
         [Header("Instantiate")]
         [SerializeField]
@@ -14,10 +14,6 @@ namespace Assets.View.Body.FullScreen.HistoryWindow
 
         [SerializeField]
         private Transform _content;
-
-        [Header("UI")]
-        [SerializeField]
-        private Text _title;
 
         [HideInInspector]
         public new GameObject gameObject;
@@ -29,10 +25,9 @@ namespace Assets.View.Body.FullScreen.HistoryWindow
             gameObject = base.gameObject;
         }
 
-        public override  void OpenWindow()
+        public void Open(HistoryProperty property)
         {
-            _title.text = _property.Title;
-            _property.LoadHistory().GetTaskCompleted(UpdateData);
+            property.LoadHistory().GetTaskCompleted(UpdateData);
         }
 
         private void UpdateData(HistoryData[] datas)
@@ -43,11 +38,6 @@ namespace Assets.View.Body.FullScreen.HistoryWindow
                 newArray[i].UpdateData(datas[i].Title, datas[i].Description, datas[i].Icon);
 
             _instantiateArray = newArray;
-        }
-
-        public override void Close()
-        {
-            gameObject.SetActive(false);
         }
     }
 }

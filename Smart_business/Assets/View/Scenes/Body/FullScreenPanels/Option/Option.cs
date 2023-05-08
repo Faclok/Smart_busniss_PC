@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Assets.View.Body.FullScreen.OptionsWindow
 {
 
-    public class Option : FullScreenPanel<OptionProperty>
+    public class Option : MonoBehaviour
     {
         [Header("Title")]
         [SerializeField]
@@ -45,13 +45,13 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
         [SerializeField]
         private HistoryOption _historyOption;
 
-        public static event Action OnClose;
         public static event Action OnShow;
 
         private Dictionary<TitleOption, BodyOptionBlock> _blocksDictionary = new();
 
         private TitleOption _current;
 
+        private OptionProperty _property;
 
         private void Awake()
         {
@@ -65,8 +65,9 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
         }
 
 
-        public override void OpenWindow()
+        public void Open(OptionProperty property)
         {
+            _property = property;
             _titleField.text = _property.Name;
             _reviewOption.UpdateData(_property.ReviewProperty);
             _descriptionOption.UpateData(_property.DescriptionFull);
@@ -78,12 +79,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
             _buttonEdit.SetActive(_property.EditProperty != null);
         }
 
-        public void ClickEdit()
-        {
-            if(_property.EditProperty != null) 
-                FullScreenPanels.OpenEditData(_property.EditProperty);
-        }
-
         private void ClickTitle(TitleOption title)
         { 
            title.isFocus = !(_current.isFocus = false);
@@ -92,15 +87,8 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
             _blocksDictionary[title].Focus();
         }
 
-        public override void Close()
-        {
-            OnClose?.Invoke();
-            gameObject.SetActive(false);
-        }
-
         private void OnDestroy()
         {
-            OnClose = null;
             OnShow = null;
         }
     }

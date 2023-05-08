@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,34 +9,41 @@ namespace Assets.View.Body.Menu
     /// <summary>
     /// Кнопка используеммая в нижней панели меню
     /// </summary>
-    [RequireComponent(typeof(Button), typeof(Animation))]
     public class ButtonPanel : MonoBehaviour
     {
-
-        /// <summary>
-        /// Компонент в котором будет отображаться иконка отдела
-        /// </summary>
-        [Header("UI")]
-        [SerializeField] private Image _icon;
-
         /// <summary>
         /// Зараннее сохранненый transform, т.к. base не эффективный
         /// </summary>
         [HideInInspector] public new Transform transform;
 
-        /// <summary>
-        /// Свойтсво иконки
-        /// </summary>
-        public Sprite Icon
+        [Header("Text")]
+        [SerializeField]
+        private TextMeshProUGUI _textField;
+
+        public PanelContent PanelContent { get; set; }
+
+        public static event Action<ButtonPanel> EnableContent;
+
+        private static ButtonPanel _lastActiveButton;
+
+        public static readonly Color EnableColor = Color.black;
+
+        public static readonly Color DisableColor = Color.grey;
+
+        static ButtonPanel()
         {
-            get => _icon.sprite;
-            set => _icon.sprite = value;
+            EnableContent += ControllActiveButtons;
         }
 
-        /// <summary>
-        /// RequireComponent гарантирует нам присутствие этого объекта
-        /// </summary>
-        private Animation _animation;
+        private static void ControllActiveButtons(ButtonPanel button)
+        {
+            _lastActiveButton?.Disable();
+            _lastActiveButton?.PanelContent.Close();
+
+            _lastActiveButton = button;
+            _lastActiveButton.Enable();
+            _lastActiveButton.PanelContent.Open();
+        }
 
         /// <summary>
         /// Пробуждение объекта
@@ -42,7 +51,6 @@ namespace Assets.View.Body.Menu
         void Awake()
         {
             transform = base.transform;
-            _animation = GetComponent<Animation>();
         }
 
         /// <summary>
@@ -50,7 +58,7 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public void Enable()
         {
-            _animation.Play("ActiveButton");
+            _textField.color = EnableColor;
         }
 
         /// <summary>
@@ -58,7 +66,7 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public void Disable()
         {
-            _animation.Play("DisableButton");
+            _textField.color = DisableColor; 
         }
 
         /// <summary>
@@ -66,7 +74,7 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public void Click()
         {
-            LowerPanel.ClickButton(this);
+            EnableContent?.Invoke(this);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
     /// <summary>
     /// Управление окна анализа
     /// </summary>
-    public class Analyze : FullScreenPanel<AnalyzeProperty>
+    public class Analyze : MonoBehaviour
     {
 
         /// <summary>
@@ -120,24 +120,17 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
 
         private Dictionary<ItemAnalyze, ItemDraw> _seletItems = new();
 
-        private static Analyze _singleton;
-
-        private void Awake()
-        {
-            _singleton = this;
-        }
-
         /// <summary>
         /// Открыть окно используя входные параметры
         /// </summary>
         /// <param name="name">Имя окна</param>
         /// <param name="nameItems">Имя объектов</param>
         /// <param name="funcLoad">Функция используемая для выгрузки данных</param>
-        public override void OpenWindow()
+        public void Open(AnalyzeProperty property)
         {
-            _title.text = _property.Name;
-            _titleItems.text = _property.NameItems;
-            _funcLoad = _property.FuncLoad;
+            _title.text = property.Name;
+            _titleItems.text = property.NameItems;
+            _funcLoad = property.FuncLoad;
 
             SetTimeFrame(_buttonsFilters[0]);
         }
@@ -248,9 +241,9 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
                 _seletItems.Add(analyzes[i], draws[i]);
         }
 
-        public static void ClickSelect(ItemAnalyze itemAnalyze)
+        public void ClickSelect(ItemAnalyze itemAnalyze)
         {
-            var selects = _singleton?._seletItems;
+            var selects = _seletItems;
 
             if (selects?.ContainsKey(itemAnalyze) ?? false)
             {
@@ -304,22 +297,6 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
                 colors[i] = Color.Lerp(_colorMax, _colorMin, i * colorFrame);
 
             return colors;
-        }
-
-
-        /// <summary>
-        /// Закрытие окна
-        /// </summary>
-        public override void Close()
-        {
-            _rightButton.interactable = false;
-            _leftButton.interactable = true;
-            gameObject.SetActive(false);
-        }
-
-        private void OnDestroy()
-        {
-            _singleton = null;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ using Assets.View.Body.FullScreen.MessageTask;
 
 namespace Assets.View.Body.FullScreen.EditWindow
 {
-    public class Edit : FullScreenPanel<EditProperty>
+    public class Edit : MonoBehaviour
     {
         [Header("Links")]
         [SerializeField]
@@ -18,18 +18,17 @@ namespace Assets.View.Body.FullScreen.EditWindow
         [SerializeField]
         private GameObject _deleteButton;
 
-        [SerializeField]
-        private MessageView _messageView;
+        private EditProperty _property;
 
-        public override void OpenWindow()
+        public void Open(EditProperty property)
         {
+            _property = property;
             _controllField.UpdateData(_property.Elements);
             _deleteButton.SetActive(_property.IsDelete);
         }
 
         public void Save()
         {
-            _messageView.Show("Changer save?", SaveServer, Close);
         }
 
         private Task SaveServer()
@@ -46,18 +45,12 @@ namespace Assets.View.Body.FullScreen.EditWindow
 
         public void Delete()
         {
-            _messageView.Show("delete object?", DeleteServer, Close);
         }
 
         private Task DeleteServer()
         {
             _property.UpdateOnChanger();
              return ModelDatabase.DeleteObject(_property.Item);
-        }
-
-        public override void Close()
-        {
-            gameObject.SetActive(false);
         }
     }
 }

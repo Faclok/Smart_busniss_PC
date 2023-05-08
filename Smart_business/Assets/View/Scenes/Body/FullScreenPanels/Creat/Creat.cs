@@ -9,7 +9,7 @@ using Assets.View.Body.FullScreen.MessageTask;
 
 namespace Assets.View.Body.FullScreen.CreatWindow
 {
-    public class Creat : FullScreenPanel<CreatProperty>
+    public class Creat : MonoBehaviour
     {
         [Header("Links")]
         [SerializeField]
@@ -18,22 +18,21 @@ namespace Assets.View.Body.FullScreen.CreatWindow
         [HideInInspector]
         public new GameObject gameObject;
 
-        [SerializeField]
-        private MessageView _messageView;
+        private CreatProperty _property;
 
         private void Awake()
         {
             gameObject = base.gameObject;
         }
 
-        public override void OpenWindow()
+        public void Open(CreatProperty property)
         {
+            _property = property;
             _controllField.UpdateData(_property.ElementDatas);
         }
 
         public void SaveAndCreat()
         {
-            _messageView.Show("creat object?",ServerRequest,Close);
         }
 
         private Task ServerRequest()
@@ -48,11 +47,6 @@ namespace Assets.View.Body.FullScreen.CreatWindow
             _property.UpdateOnChanger();
 
             return Task.Run(()=> ModelDatabase.CreatObject(_property.ItemCreat));
-        }
-
-        public override void Close()
-        {
-            gameObject.SetActive(false);
         }
     }
 }
