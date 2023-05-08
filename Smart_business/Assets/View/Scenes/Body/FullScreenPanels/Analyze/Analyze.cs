@@ -232,7 +232,7 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
             _seletItems.Clear();
             ItemDraw.isFillAmount = false;
             
-            var analyzes = _controllItems.UpdateData(datas, colors);
+            var analyzes = _controllItems.UpdateData(this ,datas, colors);
             var draws = _diagram.UpdateData(datas, colors);
 
             _notData.enabled = !ItemDraw.isFillAmount;

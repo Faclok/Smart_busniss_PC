@@ -46,6 +46,8 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
 
         private Color _color;
 
+        private Analyze _analyzeWindow;
+
         public const float Translucent = 0.5f;
 
         /// <summary>
@@ -54,8 +56,9 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         /// <param name="title">Имя</param>
         /// <param name="percent">Процент</param>
         /// <param name="color">Цвет</param>
-        public void UpadteData(string title, float  percent, Color color)
+        public void UpadteData(Analyze analyze,string title, float  percent, Color color)
         {
+            _analyzeWindow = analyze;
             _title.text = title;
             _percent.text = percent.ToString("n2") + "%";
             _color = _colorIcon.color = color;
@@ -63,7 +66,7 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
 
         public void Click()
         {
-            Analyze.ClickSelect(this);
+            _analyzeWindow.ClickSelect(this);
         }
     }
 }

@@ -33,21 +33,20 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         /// </summary>
         /// <param name="datas">Данные</param>
         /// <param name="colors">Цвета</param>
-        public ItemAnalyze[] UpdateData(ItemData[] datas, Color[] colors)
-            => InstantiateItems(datas.Length - (_instantiateItems?.Length ?? 0), datas, colors);
+        public ItemAnalyze[] UpdateData(Analyze analyze,ItemData[] datas, Color[] colors)
+            => InstantiateItems(analyze,datas, colors);
 
         /// <summary>
         /// Установка данных
         /// </summary>
-        /// <param name="countAdd">количество которое нужно добавить</param>
         /// <param name="datas">Данные</param>
         /// <param name="colors">Цвета</param>
-        private ItemAnalyze[] InstantiateItems(int countAdd,ItemData[] datas, Color[] colors)
+        private ItemAnalyze[] InstantiateItems(Analyze analyze,ItemData[] datas, Color[] colors)
         {
             var list = InstantiateExtensions.GetOverwriteInstantiate(_prefab, _content, _instantiateItems, datas);
 
             for (int i = 0; i < datas.Length; i++)
-                list[i].UpadteData(datas[i].Name, datas[i].Precent, colors[i]);
+                list[i].UpadteData(analyze, datas[i].Name, datas[i].Precent, colors[i]);
 
             return _instantiateItems = list;
         }

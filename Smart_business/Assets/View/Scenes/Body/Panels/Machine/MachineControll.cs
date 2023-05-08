@@ -15,6 +15,7 @@ using Assets.View.Body.FullScreen.CreatWindow;
 using Assets.View.Body.FullScreen.Fields;
 using Assets.View.Body.FullScreen.HistoryWindow;
 using Assets.View.Body.FullScreen.OptionsWindow;
+using Assets.View.Body.FullScreen.EditWindow;
 
 namespace Assets.View.Body.Machine
 {
@@ -42,10 +43,10 @@ namespace Assets.View.Body.Machine
 
         [Header("Panels")]
         [SerializeField]
-        private History _history;
+        private Option _option;
 
         [SerializeField]
-        private Option _option;
+        private Edit _edit;
 
         /// <summary>
         /// Амитор загрузки объектов
@@ -89,14 +90,9 @@ namespace Assets.View.Body.Machine
             _singleton = this;
         }
 
-        private void Start()
+        public static void FocusMachine(MachineBehaviour machine, OptionProperty option, EditProperty edit)
         {
-            _history.Open(HistoryProperty);
-        }
-
-        public static void FocusMachine(MachineBehaviour machine, HistoryProperty history, OptionProperty option)
-        {
-            _singleton._history.Open(history);
+            _singleton._edit.Open(edit);
             _singleton._option.Open(option);
         }
 

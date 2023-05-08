@@ -48,7 +48,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             MoveDate.OnDateChanged += OnMoveDate;
 
             BodyOptionBlock.OnEnable += OnEnableBlock;
-            Option.OnClose += () => _bodyLine.SetActive(false);
             Option.OnShow += () => _isFirstOpenWindow = true;
         }
 
