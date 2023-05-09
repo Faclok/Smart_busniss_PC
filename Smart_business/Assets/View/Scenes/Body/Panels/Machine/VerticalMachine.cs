@@ -41,25 +41,6 @@ namespace Assets.View.Body.Machine
         private Transform _contentMachine;
 
         /// <summary>
-        /// Иконка для перезагрузки отдела
-        /// </summary>
-        [Header("Icon load")]
-        [SerializeField]
-        private Image _iconUpdate;
-
-        /// <summary>
-        /// Высота для отягивания иконки загрузки
-        /// </summary>
-        [SerializeField]
-        private RectTransform _transformItemHeight;
-
-        /// <summary>
-        /// Аниматор загрузки
-        /// </summary>
-        [SerializeField]
-        private animationItems.ControllLoadAnimation _animtionItems;
-
-        /// <summary>
         /// Высота по которой отягивается иконка
         /// </summary>
         private float _itemHeight;
@@ -98,11 +79,9 @@ namespace Assets.View.Body.Machine
         /// </summary>
         private void Start()
         {
-            _animtionItems.ShowItems();
             Task.Run(async () => { return await ModelDatabase.GetUniqueObjectAsync<MachineData>(MachineData.TableContains); }).GetTaskCompleted(OnDatasLoad);
 
 
-            _itemHeight = _transformItemHeight.rect.height;
             _startHeight = transform.localPosition.y;
             FilterControllMachine.FilterClick += OnSortFilter;
         }
@@ -135,38 +114,10 @@ namespace Assets.View.Body.Machine
                 machineBehaviours[i].UpdateData(machines[i]);
 
             _machineBehaviours = machineBehaviours;
-
-            _animtionItems.HideItems();
-        }
-
-        /// <summary>
-        /// Срабатывает когда скролите главное меню
-        /// </summary>
-        /// <param name="content"></param>
-        public void CheckScrollVertical(RectTransform content)
-        {
-            var moveFrame = _startHeight - content.localPosition.y;
-            var alpha = moveFrame / _itemHeight;
-
-            _iconUpdate.color = new Color(1f, 1f, 1f, _iconUpdate.fillAmount = alpha);
-
-            if (_iconUpdate.fillAmount >= 1f)
-            {
-#if PLATFORM_ANDROID
-                if (Input.touchCount >= 1)
-                    return;
-#else
-                 if(Input.mousePresent)
-                    return;
-#endif
-                _animtionItems.ShowItems();
-                Task.Run(async () => { return await ModelDatabase.GetUniqueObjectAsync<MachineData>(MachineData.TableContains); }).GetTaskCompleted(OnDatasLoad);
-            }
         }
 
         public void UpdateDatasOnChanger()
         {
-            _animtionItems.ShowItems();
             Task.Run(async () => { return await ModelDatabase.GetUniqueObjectAsync<MachineData>(MachineData.TableContains); }).GetTaskCompleted(OnDatasLoad);
         }
         /// <summary>

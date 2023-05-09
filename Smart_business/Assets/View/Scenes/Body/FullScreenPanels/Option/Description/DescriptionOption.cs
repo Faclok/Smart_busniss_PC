@@ -4,7 +4,7 @@ using Assets.View;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow.Description
 {
-    public class DescriptionOption : BodyOptionBlock
+    public class DescriptionOption : MonoBehaviour
     {
         [Header("Prefab")]
         [SerializeField]

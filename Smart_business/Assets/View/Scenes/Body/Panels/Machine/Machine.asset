@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Machine
   m_EditorClassIdentifier: 
   _title: machine
-  _icon: {fileID: 21300000, guid: 0f45835e45d0cba49bd4ed0d91a04575, type: 3}
-  _panelConent: {fileID: -1963568762144788340, guid: 2f17cf55032626841b40ef74d5492e9f, type: 3}
+  _panelConent: []

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow.History
 {
-    public class HistoryOption : BodyOptionBlock
+    public class HistoryOption : MonoBehaviour
     {
         [Header("Prefab")]
         [SerializeField]

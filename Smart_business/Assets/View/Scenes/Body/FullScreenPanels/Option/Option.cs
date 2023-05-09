@@ -5,7 +5,7 @@ using UnityEngine;
 using Assets.View.Body.FullScreen.OptionsWindow.Review;
 using Assets.View.Body.FullScreen.OptionsWindow.Description;
 using Assets.View.Body.FullScreen.OptionsWindow.History;
-using UnityEngine.UI;
+using TMPro;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow
 {
@@ -14,56 +14,26 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
     {
         [Header("Title")]
         [SerializeField]
-        private Text _titleField;
+        private TextMeshProUGUI _titleField;
 
         [Header("Edit button")]
         [SerializeField]
         private GameObject _buttonEdit;
-
-        [Header("Instaitiate")]
-        [SerializeField]
-        private TitleOption _titleOptionStart;
-
-        [Header("Review")]
-        [SerializeField]
-        private TitleOption _titleReview;
 
         [SerializeField]
         private ReviewOption _reviewOption;
 
         [Header("Description")]
         [SerializeField]
-        private TitleOption _titleDescription;
-
-        [SerializeField]
         private DescriptionOption _descriptionOption;
 
         [Header("History")]
-        [SerializeField]
-        private TitleOption _titleHistory;
-
         [SerializeField]
         private HistoryOption _historyOption;
 
         public static event Action OnShow;
 
-        private Dictionary<TitleOption, BodyOptionBlock> _blocksDictionary = new();
-
-        private TitleOption _current;
-
         private OptionProperty _property;
-
-        private void Awake()
-        {
-            TitleOption.Show += ClickTitle;
-
-            _current = _titleOptionStart;
-
-            _blocksDictionary.Add(_titleReview, _reviewOption);
-            _blocksDictionary.Add(_titleDescription, _descriptionOption);
-            _blocksDictionary.Add(_titleHistory, _historyOption);
-        }
-
 
         public void Open(OptionProperty property)
         {
@@ -74,17 +44,8 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
             _historyOption.UpdateData(_property.ValuesHistory);
 
             OnShow?.Invoke();
-            _titleOptionStart.Click();
 
             _buttonEdit.SetActive(_property.EditProperty != null);
-        }
-
-        private void ClickTitle(TitleOption title)
-        { 
-           title.isFocus = !(_current.isFocus = false);
-            _current = title;
-
-            _blocksDictionary[title].Focus();
         }
 
         private void OnDestroy()

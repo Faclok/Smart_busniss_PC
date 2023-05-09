@@ -31,44 +31,16 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private float _distanceZ;
 
-        private BodyOptionBlock _currnetBody;
-
-        private BodyOptionBlock _currnetBodyActive;
-
-        private bool _isFirstOpenWindow = true;
-
-        private void Awake()
-        {
-            _currnetBodyActive = _currnetBody = GetComponentInParent<BodyOptionBlock>();
-        }
-
         private void Start()
         {
             MoveDate.OnTaskCompleted += UpdateDraw;
             MoveDate.OnDateChanged += OnMoveDate;
-
-            BodyOptionBlock.OnEnable += OnEnableBlock;
-            Option.OnShow += () => _isFirstOpenWindow = true;
-        }
-
-        private void OnEnableBlock(BodyOptionBlock body)
-        {
-            if (_isFirstOpenWindow)
-            {
-                _bodyLine.SetActive(false);
-                _isFirstOpenWindow = false;
-            }
-            else _bodyLine.SetActive(body == _currnetBody);
-
-            _currnetBodyActive = body;
         }
 
         public void OnMoveDate(DateTime time) => _bodyLine.SetActive(false);
 
         private void UpdateDraw(float[] values)
         {
-            _bodyLine.SetActive(_currnetBodyActive == _currnetBody);
-
             _gradient.m_color2 = _lineRender.startColor = values.Length > 0 ? _lineRender.endColor = values[0] > values[^1] ? _stonksColor : _noStonksColor : Color.white;
 
             _gradient.enabled = false; //Не знаю как еще раз вызвать отрисовку, т.к. объект не перерисовывается после изменения данных

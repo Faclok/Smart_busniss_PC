@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 {
-    public class ReviewOption : BodyOptionBlock
+    public class ReviewOption : MonoBehaviour
     {
         [Header("Components")]
         [SerializeField]
@@ -13,23 +13,12 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private MoveDate _moveDate;
 
-        [Header("Open Links")]
-        [SerializeField]
-        private FilterDate _filterDate;
-
         [Header("Animation")]
         [SerializeField]
         private Animation _animation;
 
         [SerializeField]
         private GameObject _animationGameObject;
-
-        public override void Awake()
-        {
-            _currentBody = this;
-            base.Awake();
-
-        }
 
         private void Start()
         {
@@ -43,7 +32,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             _rowDate.UpdateIcon(property.IconDate);
             _rowDate.UpdateDate(property.ValueLastActive,property.TimeLastActive);
 
-            _moveDate.SetTimeFrame(_filterDate);
         }
 
         private void OnMoveDate(DateTime time)
