@@ -82,7 +82,7 @@ namespace Assets.View.Body.Menu
             foreach (var item in buttons)
             {
                 var div = Instantiate(_divPanel, _contentDivs, false);
-                var buttonFirst = div.UpdateData(item.Key.Title, item.Key.Content,item.Value);
+                var buttonFirst = div.UpdateData(item.Key.Title, item.Key.Content, _contentPanels,item.Value);
 
                 if (mainPanel == item.Key.Title)
                     keyValue = buttonFirst;

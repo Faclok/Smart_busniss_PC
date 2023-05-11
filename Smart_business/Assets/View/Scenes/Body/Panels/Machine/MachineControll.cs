@@ -16,6 +16,7 @@ using Assets.View.Body.FullScreen.Fields;
 using Assets.View.Body.FullScreen.HistoryWindow;
 using Assets.View.Body.FullScreen.OptionsWindow;
 using Assets.View.Body.FullScreen.EditWindow;
+using TMPro;
 
 namespace Assets.View.Body.Machine
 {
@@ -26,6 +27,12 @@ namespace Assets.View.Body.Machine
 
     public class MachineControll : PanelContent
     {
+        [Header("Text Head")]
+        [SerializeField]
+        private TextMeshProUGUI _titleText;
+
+        [SerializeField]
+        private TextMeshProUGUI _descriptionText;
 
         /// <summary>
         /// Иконки машин
@@ -49,15 +56,9 @@ namespace Assets.View.Body.Machine
         private Edit _edit;
 
         /// <summary>
-        /// Амитор загрузки объектов
-        /// </summary>
-        [Header("Items")]
-        [SerializeField]
-        private ItemsLoad _itemsLoad;
-
-        /// <summary>
         /// Контроль машин в главном меню
         /// </summary>
+        [Header("Items")]
         [SerializeField]
         private VerticalMachine _verticalMachine;
 
@@ -92,6 +93,8 @@ namespace Assets.View.Body.Machine
 
         public static void FocusMachine(MachineBehaviour machine, OptionProperty option, EditProperty edit)
         {
+            _singleton._titleText.text = machine.Data.Name;
+            _singleton._descriptionText.text = machine.Data["dataSet"];
             _singleton._edit.Open(edit);
             _singleton._option.Open(option);
         }
@@ -199,7 +202,7 @@ namespace Assets.View.Body.Machine
         }
 
         public static bool IsRoot(string root)
-            => ManagementAssistant.AccessAccount["machine"].Contains("all") || ManagementAssistant.AccessAccount["machine"].Contains(root);
+            => ManagementAssistant.AccessAccount["Машиное отделение"].Contains("all") || ManagementAssistant.AccessAccount["Машиное отделение"].Contains(root);
 
     }
 }

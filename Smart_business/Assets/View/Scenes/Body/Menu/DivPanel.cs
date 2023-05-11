@@ -20,7 +20,7 @@ namespace Assets.View.Body.Menu
         [SerializeField]
         private TextMeshProUGUI _textField;
 
-        public ButtonPanel UpdateData(string title, PanelContent[] contents, string[] accessUser)
+        public ButtonPanel UpdateData(string title, PanelContent[] contents, Transform contentPanel, string[] accessUser)
         {
             _textField.text = title;
             var array = new List<ButtonPanel>();
@@ -30,6 +30,7 @@ namespace Assets.View.Body.Menu
                 {
                     var button = Instantiate(_prefab, _content, false);
                     button.PanelContent = contents[i];
+                    Instantiate(contents[i], contentPanel, false);
                     array.Add(button);
                 }
 

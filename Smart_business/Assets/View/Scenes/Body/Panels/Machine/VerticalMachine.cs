@@ -1,5 +1,6 @@
 using Assets.MultiSetting;
 using Assets.View.Body.FullScreen;
+using Assets.View.SceneMove;
 using Assets.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace Assets.View.Body.Machine
         /// Высота по которой отягивается иконка
         /// </summary>
         private float _itemHeight;
-        
+
         /// <summary>
         /// Изначальная высота
         /// </summary>
@@ -138,7 +139,7 @@ namespace Assets.View.Body.Machine
             if (string.IsNullOrWhiteSpace(input.text))
                 return;
 
-            for(int i = 0; i < _machineBehaviours?.Length; i++)
+            for (int i = 0; i < _machineBehaviours?.Length; i++)
                 _machineBehaviours[i].gameObject.SetActive(_machineBehaviours[i].Data.Name.Contains(input.text));
         }
     }

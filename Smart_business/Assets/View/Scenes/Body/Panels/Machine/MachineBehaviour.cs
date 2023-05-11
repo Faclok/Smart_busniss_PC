@@ -96,7 +96,6 @@ namespace Assets.View.Body.Machine
             var edit = new EditProperty(Data, datas, MachineControll.UpdateDatasOnChangers, MachineControll.IsRoot("delete"));
 
             MachineControll.FocusMachine(this,option, edit);
-
         }
 
         private async Task<float[]> FuncLoadGraphicAsync(DateTime start, DateTime end)

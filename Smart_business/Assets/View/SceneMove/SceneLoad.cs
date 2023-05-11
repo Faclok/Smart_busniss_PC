@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,11 +27,6 @@ namespace Assets.View.SceneMove
         /// Операция загрузки объекта
         /// </summary>
         private static AsyncOperation _loadSceneAsync;
-
-        /// <summary>
-        /// Имя последней сцены
-        /// </summary>
-        private static string _sceneName;
 
         /// <summary>
         /// Пробуждение объекта
