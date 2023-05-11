@@ -91,11 +91,11 @@ namespace Assets.View.Body.Machine
             _singleton = this;
         }
 
-        public static void FocusMachine(MachineBehaviour machine, OptionProperty option, EditProperty edit)
+        public static void FocusMachine(MachineBehaviour machine, OptionProperty option)
         {
             _singleton._titleText.text = machine.Data.Name;
             _singleton._descriptionText.text = machine.Data["dataSet"];
-            _singleton._edit.Open(edit);
+            _singleton._edit.Open(option.EditProperty);
             _singleton._option.Open(option);
         }
 

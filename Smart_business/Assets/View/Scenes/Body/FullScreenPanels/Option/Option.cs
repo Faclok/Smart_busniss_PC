@@ -6,6 +6,8 @@ using Assets.View.Body.FullScreen.OptionsWindow.Review;
 using Assets.View.Body.FullScreen.OptionsWindow.Description;
 using Assets.View.Body.FullScreen.OptionsWindow.History;
 using TMPro;
+using UnityEngine.UI;
+using Assets.View.Body.FullScreen.EditWindow;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow
 {
@@ -18,7 +20,10 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
 
         [Header("Edit button")]
         [SerializeField]
-        private GameObject _buttonEdit;
+        private Button _buttonEdit;
+
+        [SerializeField]
+        private GameObject _editWindow;
 
         [SerializeField]
         private ReviewOption _reviewOption;
@@ -45,7 +50,12 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
 
             OnShow?.Invoke();
 
-            _buttonEdit.SetActive(_property.EditProperty != null);
+            _buttonEdit.interactable = _property.EditProperty != null;
+        }
+
+        public void ClickEdit()
+        {
+            _editWindow.SetActive(true);
         }
 
         private void OnDestroy()

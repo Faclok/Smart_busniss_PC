@@ -15,20 +15,23 @@ namespace Assets.View.Body.FullScreen.EditWindow
         [SerializeField]
         private ControllField _controllField;
 
-        [SerializeField]
-        private GameObject _deleteButton;
-
         private EditProperty _property;
 
         public void Open(EditProperty property)
         {
             _property = property;
             _controllField.UpdateData(_property.Elements);
-            _deleteButton.SetActive(_property.IsDelete);
         }
 
         public void Save()
         {
+            SaveServer();
+        }
+
+        public void Close()
+        {
+            _controllField.Replace();
+            gameObject.SetActive(false);
         }
 
         private Task SaveServer()
@@ -41,16 +44,6 @@ namespace Assets.View.Body.FullScreen.EditWindow
 
             _property.UpdateOnChanger();
             return Task.Run(()=> ModelDatabase.UpdateObject(_property.Item, updateColumns));
-        }
-
-        public void Delete()
-        {
-        }
-
-        private Task DeleteServer()
-        {
-            _property.UpdateOnChanger();
-             return ModelDatabase.DeleteObject(_property.Item);
         }
     }
 }

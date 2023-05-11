@@ -87,15 +87,14 @@ namespace Assets.View.Body.Machine
         /// </summary>
         public void Click()
         {
-            var option = new OptionProperty(Data.Name, null, new ReviewProperty(MachineControll.GetIcon("LastActive"), FuncLoadGraphicAsync, "FIX", "FIX"), Data["description"], GetHistoryAsync);
-
             var datas = new ElementData[] { new ElementData("ID","id",Data["id"],false,int.MaxValue.ToString().Length,true), new ElementData("Name", "name",Data["name"], true,20),
                                             new ElementData("Creat", "dataSet", Data.CreatMachineSQL, false,15),new ElementData("Icon", "icon", Data["icon"], true, 60),
                                             new ElementData("Описание","description",Data["description"],true, int.MaxValue)};
 
             var edit = new EditProperty(Data, datas, MachineControll.UpdateDatasOnChangers, MachineControll.IsRoot("delete"));
-
-            MachineControll.FocusMachine(this,option, edit);
+            var option = new OptionProperty(Data.Name, edit, new ReviewProperty(MachineControll.GetIcon("LastActive"), FuncLoadGraphicAsync, "FIX", "FIX"), Data["description"], GetHistoryAsync);
+          
+            MachineControll.FocusMachine(this ,option);
         }
 
         private async Task<float[]> FuncLoadGraphicAsync(DateTime start, DateTime end)

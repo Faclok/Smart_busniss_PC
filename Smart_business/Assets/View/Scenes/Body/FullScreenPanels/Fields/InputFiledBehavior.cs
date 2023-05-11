@@ -11,41 +11,16 @@ namespace Assets.View.Body.FullScreen.Fields
         private InputField _inputField;
 
         [SerializeField]
-        private Text _title;
-
-        [SerializeField]
-        private Text _description;
-
-        [SerializeField]
-        private Text _viewCountSymbols;
-
-        [SerializeField]
-        private Button _replaceButton;
-
-        [SerializeField]
-        private GameObject _contentBody;
-
-        private TextFieldBehavior _textView;
-        private ElementData _data;
-        private string _startValue;
         private RectTransform _inputFieldRect;
 
-        private void Awake()
-        {
-            _inputFieldRect = _inputField.GetComponent<RectTransform>();
-        }
+        private ElementData _data;
+        private string _startValue;
 
-        public void UpdateData(ElementData data, TextFieldBehavior textView)
+        public void UpdateData(ElementData data)
         {
             _data = data;
-            _textView = textView;
             _startValue = _data.Value;
-            _contentBody.SetActive(true);
-
-            _title.text = _data.Title;
-            _description.enabled = _data.IsNumber;
-
-            _replaceButton.interactable = _inputField.interactable = data.IsEdit;
+            _inputField.interactable = data.IsEdit;
             _inputField.text = data.Value;
 
             if(data.IsEdit)
@@ -54,24 +29,15 @@ namespace Assets.View.Body.FullScreen.Fields
 
         public void ChangerValue()
         {
+            Debug.Log("changer set");
             _data.Value = _inputField.text;
             _inputField.text = _data.Value;
-            _viewCountSymbols.text = $"{_data.Value.Length}/{_data.CountSymbols}";
             _inputFieldRect.localScale = _inputFieldRect.localScale;
         }
 
         public void Replace()
         {
             _inputField.text = _data.Value = _startValue;
-        }
-
-        public void Copy()
-            => GUIUtility.systemCopyBuffer = _data.Value;
-
-        public void Save()
-        {
-            _textView.Draw();
-            _contentBody.SetActive(false);
         }
     }
 }

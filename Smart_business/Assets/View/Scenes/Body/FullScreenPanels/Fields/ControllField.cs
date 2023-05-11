@@ -1,6 +1,7 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 using Assets.MultiSetting;
+using System.Linq;
 
 namespace Assets.View.Body.FullScreen.Fields
 {
@@ -14,9 +15,6 @@ namespace Assets.View.Body.FullScreen.Fields
         [SerializeField]
         private TextFieldBehavior _prefab;
 
-        [SerializeField]
-        private InputFiledBehavior _inputField;
-
         private TextFieldBehavior[] _behaviors = new TextFieldBehavior[0];
         private ElementData[] _datas;
 
@@ -29,12 +27,18 @@ namespace Assets.View.Body.FullScreen.Fields
         public ElementData[] SaveProperty()
             => _datas;
 
+        public void Replace()
+        {
+            for (int i = 0; i < _behaviors.Length; i++)
+                _behaviors[i].Replace();
+        }
+
         private void InstantiateElements(ElementData[] datas)
         {
             var newDatas = InstantiateExtensions.GetOverwriteInstantiate(_prefab,_content, _behaviors,datas);
 
             for (int i = 0; i < newDatas.Length; i++)
-                newDatas[i].UpdateData(datas[i], _inputField);
+                newDatas[i].UpdateData(datas[i]);
 
             _behaviors = newDatas;
         }

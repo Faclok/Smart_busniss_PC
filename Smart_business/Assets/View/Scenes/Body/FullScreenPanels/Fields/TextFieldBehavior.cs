@@ -14,10 +14,10 @@ namespace Assets.View.Body.FullScreen.Fields
         private Text _title;
 
         [SerializeField]
-        private Text _viewText;
+        private InputField _viewText;
 
         [SerializeField]
-        private Button _button;
+        private InputFiledBehavior _inputField;
 
         [HideInInspector]
         public new GameObject gameObject;
@@ -26,9 +26,6 @@ namespace Assets.View.Body.FullScreen.Fields
         public new Transform transform;
 
         private ElementData _data;
-
-        private InputFiledBehavior _inputField;
-
          
         private void Awake()
         {
@@ -36,18 +33,23 @@ namespace Assets.View.Body.FullScreen.Fields
             transform = GetComponent<RectTransform>();
         }
 
-        public void UpdateData(ElementData data, InputFiledBehavior inputFiled)
+        public void UpdateData(ElementData data)
         {
-            _inputField = inputFiled;
+            _inputField.UpdateData(data);
             _data = data;
             _title.text = data.Title;
             Draw();
         }
 
+        public void Replace()
+        {
+            if (!_data.IsEdit)
+                return;
+
+            _inputField.Replace();
+        }
+
         public void Draw()
           =>  _viewText.text = _data.Value;
-
-        public void Click()
-            => _inputField.UpdateData(_data, this);
     }
 }
