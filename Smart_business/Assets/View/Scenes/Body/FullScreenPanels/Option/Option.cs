@@ -23,7 +23,14 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
         private Button _buttonEdit;
 
         [SerializeField]
+        private GameObject _lineRender;
+
+        [Header("Edit")]
+        [SerializeField]
         private GameObject _editWindow;
+
+        [SerializeField]
+        private Edit _edit;
 
         [SerializeField]
         private ReviewOption _reviewOption;
@@ -36,31 +43,29 @@ namespace Assets.View.Body.FullScreen.OptionsWindow
         [SerializeField]
         private HistoryOption _historyOption;
 
-        public static event Action OnShow;
-
         private OptionProperty _property;
 
         public void Open(OptionProperty property)
         {
             _property = property;
             _titleField.text = _property.Name;
+
             _reviewOption.UpdateData(_property.ReviewProperty);
             _descriptionOption.UpateData(_property.DescriptionFull);
             _historyOption.UpdateData(_property.ValuesHistory);
 
-            OnShow?.Invoke();
-
             _buttonEdit.interactable = _property.EditProperty != null;
+        }
+
+        public void FirstStart()
+        {
+            _reviewOption.FirstStart();
         }
 
         public void ClickEdit()
         {
             _editWindow.SetActive(true);
-        }
-
-        private void OnDestroy()
-        {
-            OnShow = null;
+            _edit.Open(_property.EditProperty, _lineRender);
         }
     }
 }

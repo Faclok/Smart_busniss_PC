@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
+using Assets.View.Body.Menu;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 {
@@ -18,6 +18,9 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         private GameObject _bodyLine;
 
         [SerializeField]
+        private GameObject _bodyLineParent;
+
+        [SerializeField]
         private RectTransform _rectLine;
 
         [Header("Colors")]
@@ -31,16 +34,30 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private float _distanceZ;
 
+        [SerializeField]
+        private PanelContent _panelContent;
+
         private void Start()
         {
             MoveDate.OnTaskCompleted += UpdateDraw;
             MoveDate.OnDateChanged += OnMoveDate;
+
+            _panelContent.OnPanelOpen += Enable;
+            _panelContent.OnPanelClose += Disable;
         }
+
+        private void Disable()
+            => _bodyLineParent.SetActive(false);
+
+        private void Enable()
+            => _bodyLineParent.SetActive(true);
 
         public void OnMoveDate(DateTime time) => _bodyLine.SetActive(false);
 
         private void UpdateDraw(float[] values)
         {
+            _bodyLine.SetActive(true);
+
             _gradient.m_color2 = _lineRender.startColor = values.Length > 0 ? _lineRender.endColor = values[0] > values[^1] ? _stonksColor : _noStonksColor : Color.white;
 
             _gradient.enabled = false; //Не знаю как еще раз вызвать отрисовку, т.к. объект не перерисовывается после изменения данных
@@ -76,6 +93,12 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
                     Debug.Log($"{i}) x: {i * distance}");
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            _panelContent.OnPanelClose -= Disable;
+            _panelContent.OnPanelOpen -= Enable;
         }
     }
 }

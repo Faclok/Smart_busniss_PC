@@ -17,33 +17,45 @@ namespace Assets.View.Body.FullScreen.EditWindow
 
         private EditProperty _property;
 
-        public void Open(EditProperty property)
+        private GameObject _lineRender;
+
+        public void Open(EditProperty property, GameObject linerender = null)
         {
+            _lineRender = linerender;
+            linerender?.SetActive(false);
+
             _property = property;
             _controllField.UpdateData(_property.Elements);
         }
 
-        public void Save()
+        public async void Save()
         {
-            SaveServer();
+            await SaveServer();
+
+            Close();
         }
 
         public void Close()
         {
+            _lineRender?.SetActive(true);
             _controllField.Replace();
             gameObject.SetActive(false);
         }
 
-        private Task SaveServer()
+        private async Task SaveServer()
         {
             var updateColumns = new Dictionary<string, string>();
             var updateLocal = _controllField.SaveProperty();
 
             foreach (var item in updateLocal)
                 updateColumns.Add(item.Key, item.Value);
+         
+            await Task.Run(()=> ModelDatabase.UpdateObject(_property.Item, updateColumns));
+
+            foreach (var item in updateColumns)
+                _property.Item.Columns[item.Key] = item.Value;
 
             _property.UpdateOnChanger();
-            return Task.Run(()=> ModelDatabase.UpdateObject(_property.Item, updateColumns));
         }
     }
 }

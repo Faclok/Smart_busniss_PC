@@ -29,7 +29,6 @@ namespace Assets.View.Body.FullScreen.Fields
 
         public void ChangerValue()
         {
-            Debug.Log("changer set");
             _data.Value = _inputField.text;
             _inputField.text = _data.Value;
             _inputFieldRect.localScale = _inputFieldRect.localScale;

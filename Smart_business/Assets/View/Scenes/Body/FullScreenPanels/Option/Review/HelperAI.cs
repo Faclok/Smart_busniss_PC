@@ -42,9 +42,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private ItemAnimation _upperAnimation;
 
-        [SerializeField]
-        private ItemAnimation _lowerAnimation;
-
         public string Prognoz { get; private set; } = string.Empty;
 
         public string Offer { get; private set; } = string.Empty;
@@ -62,10 +59,7 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             _activeTime = start;
 
             _upperAnimation.gameObject.SetActive(true);
-            _lowerAnimation.gameObject.SetActive(true);
-
             _upperAnimation.Play();
-            _lowerAnimation.Play();
         }
 
         private async void UpdateText(float[] data)
@@ -90,7 +84,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
             } //FIX
             _upperAnimation.gameObject.SetActive(false);
-            _lowerAnimation.gameObject.SetActive(false);
         }
     }
 }

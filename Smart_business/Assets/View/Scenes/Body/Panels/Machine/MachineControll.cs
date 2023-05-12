@@ -52,9 +52,6 @@ namespace Assets.View.Body.Machine
         [SerializeField]
         private Option _option;
 
-        [SerializeField]
-        private Edit _edit;
-
         /// <summary>
         /// Контроль машин в главном меню
         /// </summary>
@@ -91,12 +88,15 @@ namespace Assets.View.Body.Machine
             _singleton = this;
         }
 
-        public static void FocusMachine(MachineBehaviour machine, OptionProperty option)
+        public static async void FocusMachine(MachineBehaviour machine, OptionProperty option)
         {
             _singleton._titleText.text = machine.Data.Name;
-            _singleton._descriptionText.text = machine.Data["dataSet"];
-            _singleton._edit.Open(option.EditProperty);
+            _singleton._descriptionText.text = machine.Data["dataSet"].Remove(machine.Data["dataSet"].Length - 7);
             _singleton._option.Open(option);
+
+            await Task.Delay(555);
+
+            _singleton._option.FirstStart();
         }
 
         public static void UpdateDatasOnChangers()

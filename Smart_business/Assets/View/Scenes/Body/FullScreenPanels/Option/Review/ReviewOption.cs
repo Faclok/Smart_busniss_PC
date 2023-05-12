@@ -31,7 +31,11 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             _moveDate.UpdateData(property.FuncLoadGraphic);
             _rowDate.UpdateIcon(property.IconDate);
             _rowDate.UpdateDate(property.ValueLastActive,property.TimeLastActive);
+        }
 
+        public void FirstStart()
+        {
+            _moveDate.FirstStart();
         }
 
         private void OnMoveDate(DateTime time)

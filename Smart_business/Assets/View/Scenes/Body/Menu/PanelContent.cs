@@ -24,7 +24,10 @@ namespace Assets.View.Body.Menu
         /// <summary>
         /// Зараннее сохранненый объект, ради оптимизации
         /// </summary>
-        [HideInInspector] public new Transform transform;
+        [HideInInspector]
+        public new Transform transform => _transform ??= base.transform;
+
+        private Transform _transform;
 
         /// <summary>
         /// Вызывается когда объект открывается
@@ -42,7 +45,6 @@ namespace Assets.View.Body.Menu
         public virtual void Awake()
         {
             gameObject = base.gameObject;
-            transform = base.transform;
         }
 
         /// <summary>

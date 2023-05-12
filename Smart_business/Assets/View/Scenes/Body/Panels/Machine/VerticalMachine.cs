@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using animationItems = Assets.View.Body.ItemsAnimationLoad;
 using MachineData = Assets.ViewModel.Datas.Machine;
 
 namespace Assets.View.Body.Machine
@@ -42,16 +41,6 @@ namespace Assets.View.Body.Machine
         private Transform _contentMachine;
 
         /// <summary>
-        /// Высота по которой отягивается иконка
-        /// </summary>
-        private float _itemHeight;
-
-        /// <summary>
-        /// Изначальная высота
-        /// </summary>
-        private float _startHeight;
-
-        /// <summary>
         /// Установление машины
         /// </summary>
         private MachineBehaviour[] _machineBehaviours = new MachineBehaviour[0];
@@ -82,8 +71,6 @@ namespace Assets.View.Body.Machine
         {
             Task.Run(async () => { return await ModelDatabase.GetUniqueObjectAsync<MachineData>(MachineData.TableContains); }).GetTaskCompleted(OnDatasLoad);
 
-
-            _startHeight = transform.localPosition.y;
             FilterControllMachine.FilterClick += OnSortFilter;
         }
 
@@ -115,6 +102,9 @@ namespace Assets.View.Body.Machine
                 machineBehaviours[i].UpdateData(machines[i]);
 
             _machineBehaviours = machineBehaviours;
+
+            if (_machineBehaviours.Length > 0)
+                _machineBehaviours[0].Click();
         }
 
         public void UpdateDatasOnChanger()

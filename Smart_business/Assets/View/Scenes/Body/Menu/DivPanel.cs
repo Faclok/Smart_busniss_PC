@@ -25,7 +25,7 @@ namespace Assets.View.Body.Menu
             _textField.text = title;
             var array = new List<ButtonPanel>();
 
-            for (int i = 0; i < accessUser.Length; i++)
+            for (int i = 0; i < contents.Length; i++)
                 if (accessUser.Contains(contents[i].Title))
                 {
                     var button = Instantiate(_prefab, _content, false);

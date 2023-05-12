@@ -75,6 +75,11 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review {
             }
         }
 
+        public void FirstStart()
+        {
+            SetTimeFrame(_buttonsFilters[0]);
+        }
+
         /// <summary>
         /// ѕеремещение в периодах, использу€ кнопки
         /// </summary>
