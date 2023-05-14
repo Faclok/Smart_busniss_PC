@@ -11,7 +11,7 @@ namespace Assets.View.Body.Machine
     public class CreatMachine : PanelContent
     {
 
-        [Header("Prefab")]
+        [Header("Link")]
         [SerializeField]
         private Creat _creat;
 

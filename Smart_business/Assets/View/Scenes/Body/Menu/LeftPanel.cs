@@ -77,6 +77,7 @@ namespace Assets.View.Body.Menu
         /// <param name="mainPanel">отдел который помечен как первый открывающийся</param>
         private void AddButtonsInstaiate(Dictionary<ItemInPackScriptableObject, string[]> buttons, string mainPanel)
         {
+            var listButtons = new List<ButtonPanel>(buttons.Count);
             ButtonPanel keyValue = null;
 
             foreach (var item in buttons)
@@ -84,12 +85,12 @@ namespace Assets.View.Body.Menu
                 var div = Instantiate(_divPanel, _contentDivs, false);
                 var buttonFirst = div.UpdateData(item.Key.Title, item.Key.Content, _contentPanels,item.Value);
 
+                listButtons.Add(buttonFirst);
                 if (mainPanel == item.Key.Title)
                     keyValue = buttonFirst;
             }
 
-            if (keyValue != null)
-                keyValue.Click();
+            (keyValue == null ? listButtons[0] : keyValue).Click();
         }
     }
 }

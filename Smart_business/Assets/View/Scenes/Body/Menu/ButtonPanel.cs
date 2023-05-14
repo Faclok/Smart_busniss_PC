@@ -22,6 +22,9 @@ namespace Assets.View.Body.Menu
 
         public PanelContent PanelContent { get; set; }
 
+        public string Title { get => _textField.text; set => _textField.text = value; }
+
+
         public static event Action<ButtonPanel> EnableContent;
 
         private static ButtonPanel _lastActiveButton;
@@ -58,7 +61,9 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public void Enable()
         {
-            _textField.color = EnableColor;
+
+            if (_textField != null)
+                _textField.color = EnableColor;
         }
 
         /// <summary>
@@ -66,7 +71,9 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public void Disable()
         {
-            _textField.color = DisableColor; 
+
+            if (_textField != null)
+                _textField.color = DisableColor;
         }
 
         /// <summary>

@@ -15,3 +15,4 @@ MonoBehaviour:
   _title: "\u041C\u0430\u0448\u0438\u043D\u043E\u0435 \u043E\u0442\u0434\u0435\u043B\u0435\u043D\u0438\u0435"
   _panelConent:
   - {fileID: 2427749161115266528, guid: 2993e2f01aa85c740a2f8762d41518ac, type: 3}
+  - {fileID: 9047727332737927319, guid: ca02168bf8eb5aa43bb2976814ebd2c5, type: 3}

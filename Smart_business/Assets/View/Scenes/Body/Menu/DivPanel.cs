@@ -29,8 +29,8 @@ namespace Assets.View.Body.Menu
                 if (accessUser.Contains(contents[i].Title))
                 {
                     var button = Instantiate(_prefab, _content, false);
-                    button.PanelContent = contents[i];
-                    Instantiate(contents[i], contentPanel, false);
+                    button.PanelContent = Instantiate(contents[i], contentPanel, false);
+                    button.Title = contents[i].Title;
                     array.Add(button);
                 }
 

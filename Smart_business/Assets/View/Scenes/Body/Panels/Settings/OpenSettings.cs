@@ -1,13 +1,44 @@
+using Assets.View.Body.Menu;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpenSettings : MonoBehaviour
+namespace Assets.View.Body.Setting
 {
-    public GameObject settings;
-    public RectTransform place;
-    public void OpenSettingsPrefab()
+
+    public class OpenSettings : MonoBehaviour
     {
-        Instantiate(settings, place, false);
+        private bool isoOpen = false;
+
+        public void Open()
+        {
+            if (isoOpen)
+            {
+                DoubleOpen();
+                return;
+            }
+
+            PanelContent.OnPanel += Close;
+
+            PanelContent.DisableCurrent();
+
+            isoOpen = true;
+            transform.SetAsLastSibling();
+        }
+
+        private void DoubleOpen()
+        {
+            isoOpen = false;
+            PanelContent.EnableCurrent();
+            transform.SetSiblingIndex(transform.parent.childCount - 2);
+            Close();
+        }
+
+        public void Close()
+        {
+            isoOpen = false;
+
+            PanelContent.OnPanel -= Close;
+        }
     }
 }

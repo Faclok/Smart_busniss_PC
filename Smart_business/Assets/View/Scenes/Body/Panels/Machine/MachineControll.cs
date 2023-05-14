@@ -82,13 +82,11 @@ namespace Assets.View.Body.Machine
             _singleton = this;
         }
 
-        public static async void FocusMachine(MachineBehaviour machine, OptionProperty option)
+        public static void FocusMachine(MachineBehaviour machine, OptionProperty option)
         {
             _singleton._titleText.text = machine.Data.Name;
             _singleton._descriptionText.text = machine.Data["dataSet"].Remove(machine.Data["dataSet"].Length - 7);
             _singleton._option.Open(option);
-
-            await Task.Delay(555);
 
             _singleton._option.FirstStart();
         }

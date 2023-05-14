@@ -29,6 +29,10 @@ namespace Assets.View.Body.Menu
 
         private Transform _transform;
 
+        private static PanelContent _currentContent;
+
+
+        public static event Action OnPanel;
         /// <summary>
         /// Вызывается когда объект открывается
         /// </summary>
@@ -52,9 +56,22 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public virtual void Open()
         {
+            _currentContent = this;
+
+            OnPanel?.Invoke();
             OnPanelOpen?.Invoke();
 
             transform.SetAsLastSibling();
+        }
+
+        public static void EnableCurrent()
+        {
+            _currentContent.Open();
+        }
+
+        public static void DisableCurrent()
+        {
+            _currentContent.Close();
         }
 
         /// <summary>
