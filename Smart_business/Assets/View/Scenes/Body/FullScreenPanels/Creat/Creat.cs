@@ -1,10 +1,10 @@
-using Assets.MultiSetting;
 using Assets.View.Body.FullScreen.Fields;
 using Assets.ViewModel;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Assets.View.Body.Menu;
 using Assets.View.Body.FullScreen.MessageTask;
 
 namespace Assets.View.Body.FullScreen.CreatWindow
@@ -20,11 +20,6 @@ namespace Assets.View.Body.FullScreen.CreatWindow
 
         private CreatProperty _property;
 
-        private void Awake()
-        {
-            gameObject = base.gameObject;
-        }
-
         public void Open(CreatProperty property)
         {
             _property = property;
@@ -33,9 +28,15 @@ namespace Assets.View.Body.FullScreen.CreatWindow
 
         public void SaveAndCreat()
         {
+            MessageView.ShowTask(_property.Question, ServerRequest, Replace);
         }
 
-        private Task ServerRequest()
+        public void Replace()
+        {
+            _controllField.Replace();
+        }
+
+        private async Task ServerRequest()
         {
             var updateColumns = _property.ItemCreat.Columns;
             var updateLocal = _controllField.SaveProperty();
@@ -44,9 +45,10 @@ namespace Assets.View.Body.FullScreen.CreatWindow
                 updateColumns[item.Key] = item.Value;
 
             _property.ItemCreat.Columns["id"] = null;
-            _property.UpdateOnChanger();
 
-            return Task.Run(()=> ModelDatabase.CreatObject(_property.ItemCreat));
+            await Task.Run(()=> ModelDatabase.CreatObject(_property.ItemCreat));
+
+            _property.UpdateOnChanger();
         }
     }
 }

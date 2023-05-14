@@ -28,36 +28,56 @@ namespace Assets.View.Body.FullScreen.MessageTask
         [SerializeField]
         private Button _ok;
 
-        private Func<Task> _action;
-        private Action _close;
+        private Func<Task> _funcTask;
+        private Action _actionOk;
 
-        public void Show(string text, Func<Task> action, Action close)
+        private static MessageView _singleton;
+
+        private void Awake()
+        {
+            _singleton = this;
+        }
+
+        public static void ShowTask(string qyestion, Func<Task> funcTask, Action actionOk)
+            => _singleton.Show(qyestion, funcTask, actionOk);
+
+        public void Show(string question, Func<Task> funcTask, Action actionOk)
         {
             _cancel.interactable = _ok.interactable = true;
-            _close = close;
-            _textViewl.text = text;
-            _action = action;
+            _textViewl.text = question;
+            _funcTask = funcTask;
+            _actionOk = actionOk;
+
             _content.SetActive(true);
         }
 
         public void Ok()
         {
             _cancel.interactable = _ok.interactable = false;
+
+            _itemAnimation.gameObject.SetActive(true);
             _itemAnimation.Play();
-            var task = _action();
-            task.GetTaskCompleted(OkEnd);
+
+            _funcTask().GetTaskCompleted(OnOk);
         }
 
-        private void OkEnd()
+        private void OnOk()
         {
+            _actionOk();
             Hide();
-            _close();
         }
 
         public void Hide()
         {
             _itemAnimation.Stop();
+            _itemAnimation.gameObject.SetActive(false);
+
             _content.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            _singleton = null;
         }
     }
 }

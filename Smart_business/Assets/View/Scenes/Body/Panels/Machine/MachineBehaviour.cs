@@ -91,7 +91,7 @@ namespace Assets.View.Body.Machine
                                             new ElementData("Creat", "dataSet", Data.CreatMachineSQL, false,15),new ElementData("Icon", "icon", Data["icon"], true, 60),
                                             new ElementData("Описание","description",Data["description"],true, int.MaxValue)};
 
-            var edit = new EditProperty(Data, datas, MachineControll.UpdateDatasOnChangers, MachineControll.IsRoot("delete"));
+            var edit = new EditProperty(Data, datas, MachineControll.UpdateDatasOnChangers, MachineControll.IsRoot("delete"), () => $"edit '{datas[1].Value}'?");
             var option = new OptionProperty(Data.Name,MachineControll.IsRoot("edit") ? edit : null, new ReviewProperty(MachineControll.GetIcon("LastActive"), FuncLoadGraphicAsync, "FIX", "FIX"), Data["description"], GetHistoryAsync);
           
             MachineControll.FocusMachine(this ,option);

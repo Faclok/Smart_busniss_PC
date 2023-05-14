@@ -13,12 +13,16 @@ namespace Assets.View.Body.FullScreen.CreatWindow
         public readonly IItemDatabase ItemCreat;
         public readonly ElementData[] ElementDatas;
         public readonly Action UpdateOnChanger;
+        public string Question => _funcQuestion();
 
-        public CreatProperty(IItemDatabase itemCreat ,ElementData[] elementDatas, Action updateOnChanger)
+        private readonly Func<string> _funcQuestion;
+
+        public CreatProperty(IItemDatabase itemCreat , ElementData[] elementDatas, Action updateOnChanger, Func<string> question)
         {
             ItemCreat = itemCreat;
             ElementDatas = elementDatas;
             UpdateOnChanger = updateOnChanger;
+            _funcQuestion = question;
         }
     }
 }

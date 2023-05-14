@@ -28,8 +28,9 @@ namespace Assets.View.Body.ItemsAnimationLoad
         [SerializeField]
         private AnimationClip _nameAnimation;
 
-        [HideInInspector]
-        public new GameObject gameObject;
+        public new GameObject gameObject => _gameObject ??= base.gameObject;
+
+        private GameObject _gameObject;
 
         /// <summary>
         /// Возвращает и задает новые размеры квадрату
@@ -45,7 +46,6 @@ namespace Assets.View.Body.ItemsAnimationLoad
         /// </summary>
         private void Awake()
         {
-            gameObject = base.gameObject;
             _rectTransform = GetComponent<RectTransform>();
              _animation = GetComponent<Animation>();
         }

@@ -13,15 +13,19 @@ namespace Assets.View.Body.FullScreen.EditWindow
         public readonly IItemDatabase Item;
         public readonly Action UpdateOnChanger;
         public readonly bool IsDelete;
+        public string Question => _funcQuestion();
+
+        private Func<string> _funcQuestion;
 
         public readonly ElementData[] Elements;
 
-        public EditProperty(IItemDatabase item, ElementData[] datas, Action updateOnChanger, bool isDelete)
+        public EditProperty(IItemDatabase item, ElementData[] datas, Action updateOnChanger, bool isDelete, Func<string> funcQuestion)
         {
             Item = item;
             Elements = datas;
             IsDelete = isDelete;
             UpdateOnChanger = updateOnChanger;
+            _funcQuestion = funcQuestion;
         }
     }
 }

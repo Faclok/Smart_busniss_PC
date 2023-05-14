@@ -28,17 +28,14 @@ namespace Assets.View.Body.FullScreen.EditWindow
             _controllField.UpdateData(_property.Elements);
         }
 
-        public async void Save()
+        public void Save()
         {
-            await SaveServer();
-
-            Close();
+            MessageView.ShowTask(_property.Question, SaveServer, Close);
         }
 
         public void Close()
         {
             _lineRender?.SetActive(true);
-            _controllField.Replace();
             gameObject.SetActive(false);
         }
 
