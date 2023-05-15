@@ -49,9 +49,9 @@ namespace Assets.ViewModel
             where TResult : class, IItemDatabase, IPullItem, new()
         => ActionServerResultOf<TResult,PullProperty<TResult>>(new PullProperty<TResult>("get pull object", table, coloumnDate, start, end));
 
-        public static Task<TResult[]> GetPullLinkObjectAsync<TResult>(string table, string columnLink, IItemDatabase link, string coloumnDate, DateTime start, DateTime end)
+        public static Task<TResult[]> GetPullLinkObjectAsync<TResult>(string table, string columnLink, IItemDatabase link, string coloumnDate, DateTime start, DateTime end, bool isLike = false)
             where TResult : class, IItemDatabase, IPullItem, ILinkToObject, new()
-        => ActionServerResultOf<TResult, PullLinkProperty<TResult>>(new PullLinkProperty<TResult>("get pull link object", table, columnLink, link.Id, coloumnDate, start, end));
+        => ActionServerResultOf<TResult, PullLinkProperty<TResult>>(new PullLinkProperty<TResult>("get pull link object", table, columnLink, link.Id, coloumnDate, start, end, isLike));
 
         public static Task DeleteObject<IDelete>(IDelete deleteObject)
             where IDelete : class, IItemDatabase

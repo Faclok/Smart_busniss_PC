@@ -84,13 +84,19 @@ namespace Assets.View.Body.Menu
             {
                 var div = Instantiate(_divPanel, _contentDivs, false);
                 var buttonFirst = div.UpdateData(item.Key.Title, item.Key.Content, _contentPanels,item.Value);
-
-                listButtons.Add(buttonFirst);
+                
                 if (mainPanel == item.Key.Title)
                     keyValue = buttonFirst;
+                else listButtons.Add(buttonFirst);
             }
 
-            (keyValue == null ? listButtons[0] : keyValue).Click();
+            if (keyValue == null)
+                listButtons.Remove(keyValue = listButtons[0]);
+
+            foreach (var item in listButtons)
+                item.PanelContent.Close();
+
+            keyValue.Click();
         }
     }
 }

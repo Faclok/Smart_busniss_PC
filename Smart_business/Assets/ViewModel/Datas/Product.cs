@@ -17,7 +17,14 @@ namespace Assets.ViewModel.Datas
             ["amount"] = string.Empty
         };
 
+        public string Name => Columns["name"];
+
+        public string CreatMachineSQL => $"{DateTime.Parse(Columns["dataSet"]):yyyy.MM.dd}";
+
+        public string Price => Columns["price"];
+
         public Dictionary<string, string> Columns { get; set; } = ColumnsCreat;
+
         public string Table => TABLE;
 
         public const string TABLE = "product";

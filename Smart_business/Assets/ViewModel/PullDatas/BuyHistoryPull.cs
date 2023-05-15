@@ -6,7 +6,7 @@ using Assets.MultiSetting;
 
 namespace Assets.ViewModel.PullDatas
 {
-    public class BuyHistoryPull : IItemDatabase, IPullItem 
+    public class BuyHistoryPull : IItemDatabase, IPullItem , ILinkToObject
     {
         public static Dictionary<string, string> ColumnsCreat => new(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -23,10 +23,20 @@ namespace Assets.ViewModel.PullDatas
 
         public string ColumnDate => COLUMN_DATE;
 
+        public string[] Products => Columns["idProducts"].Split('$');
+
+        public string Price => Columns["priceConst"];
+
         public Dictionary<string, string> Columns { get; set; } = ColumnsCreat;
 
         public const string TABLE = "buyHistoryPull";
 
-        public string Table => TABLE; 
+        public string Table => TABLE;
+
+        public const string COLUMN_LINK = "idClient";
+
+        public string ColumnLink => COLUMN_LINK;
+
+        public int Link => int.Parse(Columns[COLUMN_LINK]);
     }
 }

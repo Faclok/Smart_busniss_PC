@@ -58,6 +58,9 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
         public void UpdateDraw(float[] values)
         {
+            if (_panelContent.IsFocus)
+                _bodyLineParent.SetActive(true);
+
             _bodyLine.SetActive(true);
 
             _gradient.m_color2 = _lineRender.startColor = values.Length > 0 ? _lineRender.endColor = values[0] > values[^1] ? _stonksColor : _noStonksColor : Color.white;

@@ -37,8 +37,8 @@ namespace Assets.Model.RequestData
 
         public readonly int Link;
 
-        public PullLinkProperty(string name,string table, string columnLink, int link, string columnDate, DateTime start, DateTime end)
-            : base($"SELECT * FROM {table} WHERE {columnLink} = '{link}' AND {columnDate} BETWEEN '{start:s}' AND '{end:s}'")
+        public PullLinkProperty(string name,string table, string columnLink, int link, string columnDate, DateTime start, DateTime end, bool isLike = false)
+            : base($"SELECT * FROM {table} WHERE {columnLink} { GetWhereValue(link, isLike)} AND {columnDate} BETWEEN '{start:s}' AND '{end:s}'")
         {
             Name = name;
             Type = typeof(TResult);
@@ -48,6 +48,14 @@ namespace Assets.Model.RequestData
             EndSearch = $"{end:s}";
             ColumnLink = columnLink;
             Link = link;
+        }
+
+        public static string GetWhereValue(int link, bool isLike)
+        {
+            if (!isLike)
+                return $"= '{link}'";
+
+            return $" LIKE '{$"%${link}$%"}'";
         }
     }
 }

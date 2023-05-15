@@ -43,6 +43,10 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public event Action OnPanelClose;
 
+        public bool IsFocus { get => _isFocus; private set => _isFocus = value; }
+
+        private bool _isFocus = false;
+
         /// <summary>
         /// Пробуждение объекта
         /// </summary>
@@ -57,6 +61,7 @@ namespace Assets.View.Body.Menu
         public virtual void Open()
         {
             _currentContent = this;
+            _isFocus = true;
 
             OnPanel?.Invoke();
             OnPanelOpen?.Invoke();
@@ -79,6 +84,7 @@ namespace Assets.View.Body.Menu
         /// </summary>
         public virtual void Close()
         {
+            _isFocus = false;
             OnPanelClose?.Invoke();
         }
 

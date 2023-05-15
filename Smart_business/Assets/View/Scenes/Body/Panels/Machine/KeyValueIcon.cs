@@ -3,14 +3,14 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.View.Body.Machine
+namespace Assets.View.Body
 {
 
     /// <summary>
     /// Используется для устновки или получения иконки
     /// </summary>
     [Serializable]
-    public class MachineIcon
+    public class KeyValueIcon
     {
         /// <summary>
         /// Имя иконки

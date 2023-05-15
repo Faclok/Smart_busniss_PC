@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.View.Body.Menu;
 using Assets.ViewModel;
-using MachineData = Assets.ViewModel.Datas.Machine;
+using ProductData = Assets.ViewModel.Datas.Product;
 using Assets.View.Body.FullScreen.AnalyzeWindow;
 using System;
 using System.Threading.Tasks;
@@ -12,15 +12,12 @@ using Assets.View.Body.FullScreen.OptionsWindow;
 using TMPro;
 using Assets.View.Body.FullScreen.OptionsWindow.History;
 
-namespace Assets.View.Body.Machine
+namespace Assets.View.Body.Product
 {
 
-    /// <summary>
-    /// Центр по управлению машин
-    /// </summary>
-
-    public class MachineControll : PanelContent
+    public class ProductControll : PanelContent
     {
+
         [Header("Text Head")]
         [SerializeField]
         private TextMeshProUGUI _titleText;
@@ -51,24 +48,24 @@ namespace Assets.View.Body.Machine
         /// </summary>
         [Header("Items")]
         [SerializeField]
-        private VerticalMachine _verticalMachine;
+        private VerticalProduct _verticalProduct;
 
         /// <summary>
         /// Имя используется в анализе
         /// </summary>
-        public const string NameDepartment = "Нагрузка";
+        public const string NameDepartment = "Продажи";
 
         /// <summary>
         /// Имя используется в анализе
         /// </summary>
-        public const string NameItemDepartment = "Приборы";
+        public const string NameItemDepartment = "Товары";
 
         public static readonly AnalyzeProperty AnalyzeProperty = new(NameDepartment, NameItemDepartment, GetItemDatas);
 
         /// <summary>
         /// Паттерн Singleton
         /// </summary>
-        private static MachineControll _singleton;
+        private static ProductControll _singleton;
 
         /// <summary>
         /// Пробуждение
@@ -80,17 +77,17 @@ namespace Assets.View.Body.Machine
             _singleton = this;
         }
 
-        public static void FocusMachine(MachineBehaviour machine, OptionProperty option)
+        public static void FocusProduct(ProductBehaviour product, OptionProperty option)
         {
-            _singleton._titleText.text = machine.Data.Name;
-            _singleton._descriptionText.text = machine.Data["dataSet"].Remove(machine.Data["dataSet"].Length - 7);
+            _singleton._titleText.text = product.Data.Name;
+            _singleton._descriptionText.text = product.Data["dataSet"].Remove(product.Data["dataSet"].Length - 7);
             _singleton._option.Open(option);
 
             _singleton._option.FirstStart();
         }
 
         public static void UpdateDatasOnChangers()
-            => _singleton._verticalMachine.UpdateDatasOnChanger();
+            => _singleton._verticalProduct.UpdateDatasOnChanger();
 
         /// <summary>
         /// Загрузка данных о периоде машин
@@ -102,46 +99,51 @@ namespace Assets.View.Body.Machine
         {
             var data = await Task.Run(() =>
             {
-               return ModelDatabase.GetPullObjectAsync<MachineWorkPull>(MachineWorkPull.TABLE, MachineWorkPull.COLUMN_DATE, start, end);
+                return ModelDatabase.GetPullObjectAsync<BuyHistoryPull>(BuyHistoryPull.TABLE, BuyHistoryPull.COLUMN_DATE, start, end);
             });
 
-            var machines = _singleton._verticalMachine.MachineDatas;
-            var machinesPercent = new Dictionary<MachineData, uint>(machines.Length);
-            var machineDictionary = new Dictionary<string, MachineData>(machines.Length);
+            var products = _singleton._verticalProduct.ProductDatas;
 
-            uint sumCount = 0;
-            for (int i = 0; i < machines.Length; i++)
+            var productPercent = new Dictionary<ProductData, decimal>(products.Length);
+            var productDictionary = new Dictionary<string, ProductData>(products.Length);
+
+            decimal sumCount = 0;
+            for (int i = 0; i < products.Length; i++)
             {
-                uint count = 0;
+                decimal count = 0;
                 for (int q = 0; q < data.Length; q++)
-                    if (machines[i]["id"] == data[q].Columns[data[q].ColumnLink])
-                        count += (uint)data[q].TimeSpan.TotalHours;
+                {
+                    if (data[q].Products.Contains(products[i]["id"]))
+                        count += decimal.Parse(data[q].Price);
+                }
 
                 sumCount += count;
-                machinesPercent.Add(machines[i], count);
-                machineDictionary.Add(machines[i]["id"],machines[i]);
+                productPercent.Add(products[i], count);
+                productDictionary.Add(products[i]["id"], products[i]);
             }
 
-            var returnArray = new ItemData[machinesPercent.Count];
+            var returnArray = new ItemData[productPercent.Count];
             int index = 0;
 
-            foreach (var item in machinesPercent)
+            foreach (var item in productPercent)
             {
-                if(item.Value != 0f && sumCount != 0)
-                     returnArray[index] = new ItemData(item.Key.Name, (item.Value / (float)sumCount) * 100f);
-                else returnArray[index] = new ItemData(item.Key.Name,0f);
+                if (item.Value != 0m && sumCount != 0)
+                    returnArray[index] = new ItemData(item.Key.Name, (float)(item.Value / sumCount * 100m));
+                else returnArray[index] = new ItemData(item.Key.Name, 0f);
 
                 index++;
             }
 
             var history = new HistoryData[data.Length];
 
+            var productKey = string.Empty;
+
             history = data.Select(o =>
              new HistoryData
              (
                  GetIcon(o.Columns["state"]),
-                 (machineDictionary.ContainsKey(o.Columns[o.ColumnLink]) ? machineDictionary[o.Columns[o.ColumnLink]].Name : "not found") +": "+ MachineBehaviour.GetParseTimeSpan(o.TimeSpan),
-                 $"{DateTime.Parse(o.Columns["dateStart"]):HH:mm dd.MM.yy} - {DateTime.Parse(o.Columns["dateEnd"]):HH:mm dd.MM.yy}"
+                 (o.Products.Any(product => productDictionary.ContainsKey(productKey = product)) ? productDictionary[productKey].Name : "not found") + ": " + o.Price,
+                 $"{DateTime.Parse(o.Columns[BuyHistoryPull.COLUMN_DATE]):HH:mm dd.MM.yy} - user id ({o.Link}"
                   )
              ).ToArray();
 
@@ -163,7 +165,8 @@ namespace Assets.View.Body.Machine
         }
 
         public static bool IsRoot(string root)
-            => ManagementAssistant.AccessAccount["Машиное отделение"].Contains("all") || ManagementAssistant.AccessAccount["Машиное отделение"].Contains(root);
+            => ManagementAssistant.AccessAccount["Продукт"].Contains("all") || ManagementAssistant.AccessAccount["Продукт"].Contains(root);
 
     }
 }
+
