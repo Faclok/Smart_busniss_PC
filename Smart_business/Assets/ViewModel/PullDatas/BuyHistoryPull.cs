@@ -38,5 +38,22 @@ namespace Assets.ViewModel.PullDatas
         public string ColumnLink => COLUMN_LINK;
 
         public int Link => int.Parse(Columns[COLUMN_LINK]);
+
+        public string this[string column]
+        {
+            get
+            {
+                if (Columns.ContainsKey(column))
+                    return Columns[column];
+
+                new Result(exception: $"no instaite column! message: {column}", TypeException.LogicApplication);
+                return column;
+            }
+            set
+            {
+                if (Columns.ContainsKey(column)) Columns[column] = value;
+                else new Result(exception: $"no instaite column! message: {column}", TypeException.LogicApplication);
+            }
+        }
     }
 }

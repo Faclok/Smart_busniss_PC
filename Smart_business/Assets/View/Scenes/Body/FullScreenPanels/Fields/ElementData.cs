@@ -28,8 +28,6 @@ namespace Assets.View.Body.FullScreen.Fields
 
         public static string GetFormatString(string newValue, ElementData data)
         {
-            if (!data.IsEdit) return data.Value;
-
             if (data.CountSymbols < newValue.Length)
                 return data.Value;
 

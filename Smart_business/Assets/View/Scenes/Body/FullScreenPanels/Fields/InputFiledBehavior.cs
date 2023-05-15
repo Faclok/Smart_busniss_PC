@@ -13,6 +13,8 @@ namespace Assets.View.Body.FullScreen.Fields
         [SerializeField]
         private RectTransform _inputFieldRect;
 
+        public string Data { get => _data.Value; set => _data.Value = value; }
+
         private ElementData _data;
         private string _startValue;
 
