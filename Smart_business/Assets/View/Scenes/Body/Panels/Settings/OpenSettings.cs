@@ -1,6 +1,4 @@
 using Assets.View.Body.Menu;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.View.Body.Setting
