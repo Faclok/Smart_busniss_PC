@@ -92,7 +92,7 @@ namespace Assets.View.Body.Machine
                                             new ElementData("Описание","description",Data["description"],true, int.MaxValue)};
 
             var edit = new EditProperty(Data, datas, MachineControll.UpdateDatasOnChangers, MachineControll.IsRoot("delete"), () => $"edit '{datas[1].Value}'?");
-            var option = new OptionProperty(Data.Name,MachineControll.IsRoot("edit") ? edit : null, new ReviewProperty(MachineControll.GetIcon("LastActive"), FuncLoadGraphicAsync, "FIX", "FIX"), Data["description"], GetHistoryAsync);
+            var option = new OptionProperty(Data.Name,MachineControll.IsRoot("edit") ? edit : null, new ReviewProperty(MachineControll.GetIcon("LastActive"), FuncLoadGraphicAsync, GetLastActive), Data["description"], GetHistoryAsync);
           
             MachineControll.FocusMachine(this ,option);
         }
@@ -109,6 +109,16 @@ namespace Assets.View.Body.Machine
                 result[i] = values[i] / maxValue;
 
             return result;
+        }
+
+        private async Task<(string LastActive, string TimeLastActive)> GetLastActive()
+        {
+            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<MachineWorkPull>(MachineWorkPull.TABLE, MachineWorkPull.COLUMN_LINK, Data, MachineWorkPull.COLUMN_DATE, DateTime.MinValue, DateTime.Now));
+
+            if (data.Length <= 0)
+                return ("no history", "no time");
+
+            return (GetParseTimeSpan(data[^1].TimeSpan), $"{DateTime.Parse(data[^1].Columns["dateEnd"]):HH:mm dd.MM.yy}");
         }
 
         private async Task<HistoryData[]> GetHistoryAsync(DateTime start, DateTime end)

@@ -21,9 +21,7 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review {
         [SerializeField]
         private FilterDate[] _buttonsFilters;
 
-        public static event Action<DateTime> OnDateChanged;
-
-        public static event Action<float[]> OnTaskCompleted;
+        public event Action<DateTime, DateTime> OnDateChanged;
 
         /// <summary>
         /// ќбозначает количество дней при перемещении
@@ -39,9 +37,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review {
         /// “екуща€ временный промежуток
         /// </summary>
         private DateFrame _dateFrameCurrent;
-
-
-        private Func<DateTime, DateTime,Task<float[]>> _loadFunction;
 
         /// <summary>
         /// ѕеремещение во временных промежутках
@@ -119,23 +114,13 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review {
             _dateFrameCurrent = new DateFrame(start, end);
 
             _dateField.text = viewText;
-            _loadFunction(start, end).GetTaskCompleted(OnCompletedTask);
 
-            OnDateChanged?.Invoke(_dateFrameCurrent.Start);
-        }
-
-        public void OnCompletedTask(float[] data)
-         =>   OnTaskCompleted?.Invoke(data);
-
-        public void UpdateData(Func<DateTime, DateTime, Task<float[]>> load)
-        {
-            _loadFunction = load;
+            OnDateChanged?.Invoke(start, end);
         }
 
         private void OnDestroy()
         {
             OnDateChanged = null;
-            OnTaskCompleted = null;
         }
 
         /// <summary>

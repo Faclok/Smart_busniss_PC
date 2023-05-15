@@ -8,9 +8,9 @@ using System;
 using System.Threading.Tasks;
 using Assets.ViewModel.PullDatas;
 using System.Linq;
-using Assets.View.Body.FullScreen.HistoryWindow;
 using Assets.View.Body.FullScreen.OptionsWindow;
 using TMPro;
+using Assets.View.Body.FullScreen.OptionsWindow.History;
 
 namespace Assets.View.Body.Machine
 {
@@ -65,8 +65,6 @@ namespace Assets.View.Body.Machine
 
         public static readonly AnalyzeProperty AnalyzeProperty = new(NameDepartment, NameItemDepartment, GetItemDatas);
 
-        public static readonly HistoryProperty HistoryProperty = new(NameDepartment,GetHistoryItems);
-
         /// <summary>
         /// Паттерн Singleton
         /// </summary>
@@ -105,9 +103,9 @@ namespace Assets.View.Body.Machine
 
             for (int i = 0; i < result.Length; i++)
                 result[i] = new HistoryData(
-                    MachineBehaviour.GetParseTimeSpan(data[i].TimeSpan),
+                   GetIcon(data[i].Columns["state"]),
                     $"{DateTime.Parse(data[i].Columns["dateStart"]):HH:mm dd.MM.yy} - {DateTime.Parse(data[i].Columns["dateEnd"]):HH:mm dd.MM.yy}",
-                    GetIcon(data[i].Columns["state"]));
+                     MachineBehaviour.GetParseTimeSpan(data[i].TimeSpan));
 
             return result;
         }
@@ -119,7 +117,7 @@ namespace Assets.View.Body.Machine
         /// <param name="start">С какого времени учитывать</param>
         /// <param name="end">По какое время учитывать</param>
         /// <returns>Список записей</returns>
-        private static async Task<ItemData[]> GetItemDatas(DateTime start, DateTime end)
+        private static async Task<PackData> GetItemDatas(DateTime start, DateTime end)
         {
             var data = await Task.Run(() =>
             {
@@ -127,18 +125,20 @@ namespace Assets.View.Body.Machine
             });
 
             var machines = _singleton._verticalMachine.MachineDatas;
-            var machinesPercent = new Dictionary<MachineData, uint>();
+            var machinesPercent = new Dictionary<MachineData, uint>(machines.Length);
+            var machineDictionary = new Dictionary<string, MachineData>(machines.Length);
 
             uint sumCount = 0;
             for (int i = 0; i < machines.Length; i++)
             {
                 uint count = 0;
                 for (int q = 0; q < data.Length; q++)
-                    if (machines[i]["id"] == data[q].Columns["idMachine"])
+                    if (machines[i]["id"] == data[q].Columns[data[q].ColumnLink])
                         count += (uint)data[q].TimeSpan.TotalHours;
 
                 sumCount += count;
                 machinesPercent.Add(machines[i], count);
+                machineDictionary.Add(machines[i]["id"],machines[i]);
             }
 
             var returnArray = new ItemData[machinesPercent.Count];
@@ -149,10 +149,22 @@ namespace Assets.View.Body.Machine
                 if(item.Value != 0f && sumCount != 0)
                      returnArray[index] = new ItemData(item.Key.Name, (item.Value / (float)sumCount) * 100f);
                 else returnArray[index] = new ItemData(item.Key.Name,0f);
+
                 index++;
             }
 
-            return returnArray;
+            var history = new HistoryData[data.Length];
+
+            history = data.Select(o =>
+             new HistoryData
+             (
+                 GetIcon(o.Columns["state"]),
+                 (machineDictionary.ContainsKey(o.Columns[o.ColumnLink]) ? machineDictionary[o.Columns[o.ColumnLink]].Name : "not found") +": "+ MachineBehaviour.GetParseTimeSpan(o.TimeSpan),
+                 $"{DateTime.Parse(o.Columns["dateStart"]):HH:mm dd.MM.yy} - {DateTime.Parse(o.Columns["dateEnd"]):HH:mm dd.MM.yy}"
+                  )
+             ).ToArray();
+
+            return new PackData(returnArray, history);
         }
 
         /// <summary>

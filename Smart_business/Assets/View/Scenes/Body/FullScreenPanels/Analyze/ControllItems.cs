@@ -17,6 +17,7 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         [SerializeField]
         private ItemAnalyze _prefab;
 
+        [Header("Link")]
         /// <summary>
         /// Тело в котором размещаются все элементы
         /// </summary>

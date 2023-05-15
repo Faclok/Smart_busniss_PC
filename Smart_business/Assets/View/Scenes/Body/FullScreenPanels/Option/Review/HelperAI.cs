@@ -48,21 +48,17 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
         private DateTime _activeTime;
 
-        private void Start()
-        {
-            MoveDate.OnDateChanged += UpdateDate;
-            MoveDate.OnTaskCompleted += UpdateText;
-        }
-
-        private void UpdateDate(DateTime start)
+        private void UpdateDate(DateTime start, DateTime end)
         {
             _activeTime = start;
 
             _upperAnimation.gameObject.SetActive(true);
             _upperAnimation.Play();
+
+
         }
 
-        private async void UpdateText(float[] data)
+        public async void UpdateText(float[] data)
         {
             if (false)
             {

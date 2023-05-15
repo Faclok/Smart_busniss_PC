@@ -93,7 +93,7 @@ namespace Assets.ViewModel
             if (data)
                 return data.Value;
 
-            return new TResult[0]; //Fix
+            throw new Exception("not root"); //FIX
         }
     }
 }

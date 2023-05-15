@@ -1,4 +1,6 @@
 using Assets.MultiSetting;
+using Assets.View.Body.FullScreen.OptionsWindow.History;
+using Assets.View.Body.FullScreen.OptionsWindow.Review;
 using Assets.View.Body.ItemsAnimationLoad;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,9 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
     /// </summary>
     public class Analyze : MonoBehaviour
     {
+        [Header("Link")]
+        [SerializeField]
+        private MoveDate _moveDate;
 
         /// <summary>
         /// Поле для имени окна
@@ -27,12 +32,6 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         /// </summary>
         [SerializeField]
         private Text _titleItems;
-
-        /// <summary>
-        /// Поле для промежутка времени
-        /// </summary>
-        [SerializeField]
-        private Text _timeFrame;
 
         [SerializeField]
         private Text _notData;
@@ -50,24 +49,8 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         [SerializeField]
         private DiagramAnalyze _diagram;
 
-        /// <summary>
-        /// Левая кнопка 
-        /// </summary>
-        [Header("Button")]
         [SerializeField]
-        private Button _leftButton;
-
-        /// <summary>
-        /// Кнопки временых промежутков
-        /// </summary>
-        [SerializeField]
-        private ButtonFilter[] _buttonsFilters;
-
-        /// <summary>
-        /// Правая кнопка
-        /// </summary>
-        [SerializeField]
-        private Button _rightButton;
+        private HistoryOption _history;
 
         /// <summary>
         /// Самый нагруженный
@@ -87,7 +70,7 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         /// </summary>
         [Header("Animation")]
         [SerializeField]
-        public Animation _animation;
+        private Animation _animation;
 
         /// <summary>
         /// Тело загрузки
@@ -96,29 +79,20 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         private GameObject _animationBody;
 
         [SerializeField]
-        private ControllLoadAnimation _controllAnimation; 
-
-        /// <summary>
-        /// Обозначает количество дней при перемещении
-        /// </summary>
-        public const int MOVE_COUNT_DAY = 1;
-
-        /// <summary>
-        /// Временый промежутов используя MOVE_COUNT_DAY
-        /// </summary>
-        public readonly static TimeSpan Move_date = new(MOVE_COUNT_DAY, 0, 0, 0);
+        private ControllLoadAnimation _controllAnimationItems;
 
         /// <summary>
         /// Загрузка данных основанных, на удаленом контроле
         /// </summary>
-        private Func<DateTime, DateTime, Task<ItemData[]>> _funcLoad;
-
-        /// <summary>
-        /// Текущая временный промежуток
-        /// </summary>
-        private DateFrame _dateFrameCurrent;
+        private Func<DateTime, DateTime, Task<PackData>> _funcLoad;
 
         private Dictionary<ItemAnalyze, ItemDraw> _seletItems = new();
+
+
+        private void Start()
+        {
+            _moveDate.OnDateChanged += MoveDate;
+        }
 
         /// <summary>
         /// Открыть окно используя входные параметры
@@ -132,91 +106,23 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
             _titleItems.text = property.NameItems;
             _funcLoad = property.FuncLoad;
 
-            SetTimeFrame(_buttonsFilters[0]);
+            _moveDate.FirstStart();
         }
 
-        /// <summary>
-        /// Перемещение во временных промежутках
-        /// </summary>
-        /// <param name="days">Кол-во дней для создания  периода</param>
-        public void SetTimeFrame(int days)
-        {
-            _leftButton.interactable = _rightButton.interactable = false;
-
-            switch (days)
-            {
-                case 0:
-
-                    MoveDate(DateTime.MinValue, DateTime.Now, "За все время");
-
-                    break;
-
-                case 1:
-
-                    MoveDate(DateTime.Today, DateTime.Now, $"{DateTime.Now:d}");
-                    _leftButton.interactable = true;
-
-                    break;
-
-                default:
-
-                    var start = DateTime.Now.AddDays(-days);
-                    MoveDate(start, DateTime.Now, $"{start:d} - {DateTime.Now:d}");
-
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Перемещение в периодах, используя кнопки
-        /// </summary>
-        /// <param name="days">Нажатая кнопка</param>
-        public void SetTimeFrame(ButtonFilter days)
-        {
-            for (int i = 0; i < _buttonsFilters.Length; i++)
-                _buttonsFilters[i].Off();
-
-            days.On();
-
-            SetTimeFrame(days.CountDay);
-        }
-
-        public void OnCompletedTask(ItemData[] data)
+        public void OnCompletedTask(PackData data)
         {
             _animation.Stop();
-            _controllAnimation.HideItems();
+            _controllAnimationItems.HideItems();
             _animationBody.SetActive(false);
 
-            UpdateData(data);
+            UpdateData(data.Items);
+            _history.OnCompletedTask(data.Histories);
         }
 
-        /// <summary>
-        /// Перемещение в днях, используя кнопки лево и право
-        /// </summary>
-        /// <param name="click">Нажатая кнопка</param>
-        public void ClickMove(Button click)
+        public void MoveDate(DateTime start, DateTime end)
         {
-            var prevDate = click == _leftButton ? -Move_date : Move_date;
-            var start = _dateFrameCurrent.Start.Add(prevDate);
-            var end = start.Add(Move_date);
-            MoveDate(start, end, $"{start:d}");
-
-            _rightButton.interactable = end.DayOfYear <= DateTime.Now.DayOfYear;
-        }
-
-        /// <summary>
-        /// Перемещение в промежуток времени
-        /// </summary>
-        /// <param name="start">Начало загрузки</param>
-        /// <param name="end">Конец загрузки</param>
-        /// <param name="viewText">Имя периода</param>
-        private void MoveDate(DateTime start, DateTime end, string viewText)
-        {
-            _dateFrameCurrent = new DateFrame(start, end);
-
-            _timeFrame.text = viewText;
-            _controllAnimation.ShowItems();
-            var task = _funcLoad(start, end).GetTaskCompleted(OnCompletedTask);
+            _controllAnimationItems.ShowItems();
+            _funcLoad(start, end).GetTaskCompleted(OnCompletedTask);
             _animationBody.SetActive(true);
             _animation.Play();
         }
@@ -299,19 +205,9 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
             return colors;
         }
 
-        /// <summary>
-        /// Временный промежуток
-        /// </summary>
-        private class DateFrame
+        private void OnDestroy()
         {
-            public readonly DateTime Start;
-            public readonly DateTime End;
-
-            public DateFrame(DateTime start, DateTime end)
-            {
-                this.Start = start;
-                this.End = end;
-            }
+            _moveDate.OnDateChanged -= MoveDate;
         }
     }
 }

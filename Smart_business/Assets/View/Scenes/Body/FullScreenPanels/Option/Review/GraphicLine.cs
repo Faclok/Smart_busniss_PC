@@ -23,6 +23,9 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private RectTransform _rectLine;
 
+        [SerializeField]
+        private MoveDate _moveDate;
+
         [Header("Colors")]
         [SerializeField]
         private Color _stonksColor;
@@ -39,8 +42,7 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
         private void Start()
         {
-            MoveDate.OnTaskCompleted += UpdateDraw;
-            MoveDate.OnDateChanged += OnMoveDate;
+            _moveDate.OnDateChanged += OnMoveDate;
 
             _panelContent.OnPanelOpen += Enable;
             _panelContent.OnPanelClose += Disable;
@@ -52,9 +54,9 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         private void Enable()
             => _bodyLineParent.SetActive(true);
 
-        public void OnMoveDate(DateTime time) => _bodyLine.SetActive(false);
+        public void OnMoveDate(DateTime start, DateTime end) => _bodyLine.SetActive(false);
 
-        private void UpdateDraw(float[] values)
+        public void UpdateDraw(float[] values)
         {
             _bodyLine.SetActive(true);
 
@@ -99,6 +101,7 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         {
             _panelContent.OnPanelClose -= Disable;
             _panelContent.OnPanelOpen -= Enable;
+            _moveDate.OnDateChanged -= OnMoveDate;
         }
     }
 }

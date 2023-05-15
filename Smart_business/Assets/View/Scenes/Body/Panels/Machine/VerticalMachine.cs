@@ -48,7 +48,7 @@ namespace Assets.View.Body.Machine
         /// <summary>
         /// Загруженые машины
         /// </summary>
-        private MachineData[] _machineDatas;
+        private MachineData[] _machineDatas = new MachineData[0];
 
         /// <summary>
         /// Свойтсво загруженных машин

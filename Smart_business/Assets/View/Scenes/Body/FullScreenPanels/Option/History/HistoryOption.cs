@@ -13,8 +13,16 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.History
         [SerializeField]
         private HistoryElement _historyElement;
 
+        [Header("Link")]
+        [SerializeField]
+        private MoveDate _moveDate;
+
         [SerializeField]
         private Transform _content;
+
+        [Header("Animation")]
+        [SerializeField]
+        private ItemsAnimationLoad.ControllLoadAnimation _controllLoadAnimation;
 
         private Func<DateTime, DateTime,Task<HistoryData[]>> _callLoad;
 
@@ -22,7 +30,7 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.History
 
         private void Start()
         {
-            MoveDate.OnDateChanged += OnDateMove;
+            _moveDate.OnDateChanged += OnDateMove;
         }
 
         public void UpdateData(Func<DateTime ,DateTime ,Task<HistoryData[]>> task)
@@ -30,13 +38,16 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.History
             _callLoad = task;
         }
 
-        private void OnDateMove(DateTime date)
+        private void OnDateMove(DateTime start, DateTime end)
         {
-            var loadTask = _callLoad(date, DateTime.Now);
-            _callLoad(date,DateTime.Now).GetTaskCompleted(OnCompletedTask);
+
+            if(_callLoad != null ) 
+            _callLoad(start, end).GetTaskCompleted(OnCompletedTask);
+
+            _controllLoadAnimation.ShowItems();
         }
 
-        private void OnCompletedTask(HistoryData[] data)
+        public void OnCompletedTask(HistoryData[] data)
         {
             var newArray = InstantiateExtensions.GetOverwriteInstantiate(_historyElement, _content, _instantiateElements, data);
 
@@ -44,6 +55,12 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.History
                 newArray[i].UpdateData(data[i].Title, data[i].Description, data[i].Icon);
 
             _instantiateElements = newArray;
+            _controllLoadAnimation.HideItems();
+        }
+
+        private void OnDestroy()
+        {
+            _moveDate.OnDateChanged -= OnDateMove;
         }
     }
 }

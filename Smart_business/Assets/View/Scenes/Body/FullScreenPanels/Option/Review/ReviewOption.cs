@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.MultiSetting;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,6 +14,12 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private MoveDate _moveDate;
 
+        [SerializeField]
+        private GraphicLine _graphicLine;
+
+        [SerializeField]
+        private HelperAI _helperAI;
+
         [Header("Animation")]
         [SerializeField]
         private Animation _animation;
@@ -20,17 +27,20 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private GameObject _animationGameObject;
 
+        private ReviewProperty _property;
+
         private void Start()
         {
-            MoveDate.OnDateChanged += OnMoveDate;
-            MoveDate.OnTaskCompleted += OnTaskCompleted;
+            _moveDate.OnDateChanged += OnMoveDate;
         }
 
-        public void UpdateData(ReviewProperty property)
+        public async void UpdateData(ReviewProperty property)
         {
-            _moveDate.UpdateData(property.FuncLoadGraphic);
+            _property = property;
             _rowDate.UpdateIcon(property.IconDate);
-            _rowDate.UpdateDate(property.ValueLastActive,property.TimeLastActive);
+
+            var tuple = await property.FuncLastActive();
+            _rowDate.UpdateDate(tuple.LastActive, tuple.TimeLastActive);
         }
 
         public void FirstStart()
@@ -38,16 +48,26 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             _moveDate.FirstStart();
         }
 
-        private void OnMoveDate(DateTime time)
+        private void OnMoveDate(DateTime start, DateTime end)
         {
             _animationGameObject.SetActive(true);
             _animation.Play();
+
+            _property.FuncLoadGraphic(start, end).GetTaskCompleted(OnTaskCompleted);
         }
 
         private void OnTaskCompleted(float[] values)
         {
             _animationGameObject.SetActive(false);
             _animation.Stop();
+
+            _helperAI.UpdateText(values);
+            _graphicLine.UpdateDraw(values);
+        }
+
+        private void OnDestroy()
+        {
+            _moveDate.OnDateChanged -= OnMoveDate;
         }
     }
 }
