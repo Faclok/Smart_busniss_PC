@@ -25,6 +25,8 @@ namespace Assets.View.Body.Product
 
         public void UpdateData(ProductData data)
         {
+            Replace();
+
             _titleField.text = data.Name;;
             _descriptionField.text = data.Price;
             ProductData = data;

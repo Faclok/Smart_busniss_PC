@@ -8,6 +8,8 @@ using Assets.View.Body.FullScreen.OptionsWindow.History;
 using TMPro;
 using UnityEngine.UI;
 using Assets.View.Body.FullScreen.EditWindow;
+using Assets.View.Body.FullScreen.MessageTask;
+using System.Threading.Tasks;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow
 {

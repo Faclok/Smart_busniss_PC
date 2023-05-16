@@ -23,6 +23,10 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review {
 
         public event Action<DateTime, DateTime> OnDateChanged;
 
+        public DateTime StartTimeCurrent => _dateFrameCurrent.Start;
+
+        public DateTime EndTimeCurrent => _dateFrameCurrent.End;
+
         /// <summary>
         /// ќбозначает количество дней при перемещении
         /// </summary>

@@ -69,7 +69,6 @@ namespace Assets.View.Body.FullScreen.MessageTask
 
         public void Hide()
         {
-            _itemAnimation.Stop();
             _itemAnimation.gameObject.SetActive(false);
 
             _content.SetActive(false);

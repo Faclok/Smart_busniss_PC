@@ -50,6 +50,10 @@ namespace Assets.View.Body.Product
         [SerializeField]
         private VerticalProduct _verticalProduct;
 
+        [Header("Edit Body")]
+        [SerializeField]
+        private GameObject _editBody;
+
         /// <summary>
         /// Имя используется в анализе
         /// </summary>
@@ -75,6 +79,22 @@ namespace Assets.View.Body.Product
             base.Awake();
 
             _singleton = this;
+        }
+
+        private void Start()
+        {
+            OnPanelOpen += UpdateOpen;
+            OnPanelClose += UpdateClose;
+        }
+
+        private void UpdateClose()
+        {
+            _editBody.SetActive(false);
+        }
+
+        private void UpdateOpen()
+        {
+            _verticalProduct.UpdateDatasOnChanger();
         }
 
         public static void FocusProduct(ProductBehaviour product, OptionProperty option)
@@ -167,6 +187,12 @@ namespace Assets.View.Body.Product
         public static bool IsRoot(string root)
             => ManagementAssistant.AccessAccount["Продукт"].Contains("all") || ManagementAssistant.AccessAccount["Продукт"].Contains(root);
 
+
+        private void OnDestroy()
+        {
+            OnPanelOpen -= UpdateOpen;
+            OnPanelClose -= UpdateClose;
+        }
     }
 }
 

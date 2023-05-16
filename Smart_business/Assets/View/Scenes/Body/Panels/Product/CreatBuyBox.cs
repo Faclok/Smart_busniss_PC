@@ -34,6 +34,8 @@ namespace Assets.View.Body.Product
 
         private ProductBehaviourShop[] _productBoxs = new ProductBehaviourShop[0];
 
+        private string PriceBox => _productBoxs.Where(o => o.Count > 0).Select(o => decimal.Parse(o.ProductData.Price) * o.Count).Sum().ToString();
+
         private void Start()
         {
             Task.Run(async () => { return await ModelDatabase.GetUniqueObjectAsync<ProductData>(ProductData.TABLE); }).GetTaskCompleted(OnDatasLoad);
@@ -55,14 +57,21 @@ namespace Assets.View.Body.Product
             };
 
             _fields.UpdateData(elements);
+
+            OnPanelOpen += UpdateOpen;
+        }
+
+        private void UpdateOpen()
+        {
+            Task.Run(async () => { return await ModelDatabase.GetUniqueObjectAsync<ProductData>(ProductData.TABLE); }).GetTaskCompleted(OnDatasLoad);
         }
 
         public void Create()
         {
-            MessageView.ShowTask($"create shop on price = '{_buyShop["priceConst"]}'?", CreateServer, Replace);
+            MessageView.ShowTask($"create shop on price = '{PriceBox}'?", CreateServer, Replace);
         }
 
-        private void Replace()
+        public void Replace()
         {
             _fields.Replace();
 
@@ -79,7 +88,7 @@ namespace Assets.View.Body.Product
                 updateColumns[item.Key] = item.Value;
 
             _buyShop.Columns["id"] = null;
-            _buyShop["priceConst"] = _productBoxs.Where(o => o.Count > 0).Select(o => decimal.Parse(o.ProductData.Price) * o.Count).Sum().ToString();
+            _buyShop["priceConst"] = PriceBox;
             _buyShop["idProducts"] = "$" + string.Join('$', _productBoxs.Where(o => o.Count > 0).Select(o => $"{o.ProductData["id"]}")) + "$";
 
             await Task.Run(() => ModelDatabase.CreatObject(_buyShop));
@@ -93,6 +102,11 @@ namespace Assets.View.Body.Product
                 productBehaviours[i].UpdateData(products[i]);
 
             _productBoxs = productBehaviours;
+        }
+
+        private void OnDestroy()
+        {
+            OnPanelOpen -= UpdateOpen;
         }
     }
 }

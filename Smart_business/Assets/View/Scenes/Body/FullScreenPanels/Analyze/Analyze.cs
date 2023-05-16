@@ -81,6 +81,8 @@ namespace Assets.View.Body.FullScreen.AnalyzeWindow
         [SerializeField]
         private ControllLoadAnimation _controllAnimationItems;
 
+        public MoveDate Data => _moveDate;
+
         /// <summary>
         /// «агрузка данных основанных, на удаленом контроле
         /// </summary>

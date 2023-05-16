@@ -6,6 +6,7 @@ using UnityEngine;
 using Assets.View.Body.FullScreen.Fields;
 using System.Threading.Tasks;
 using Assets.View.Body.FullScreen.MessageTask;
+using UnityEngine.UIElements;
 
 namespace Assets.View.Body.FullScreen.EditWindow
 {
@@ -14,6 +15,9 @@ namespace Assets.View.Body.FullScreen.EditWindow
         [Header("Links")]
         [SerializeField]
         private ControllField _controllField;
+
+        [SerializeField]
+        private Button _buttonDelete;
 
         private EditProperty _property;
 
@@ -37,6 +41,18 @@ namespace Assets.View.Body.FullScreen.EditWindow
         {
             _lineRender?.SetActive(true);
             gameObject.SetActive(false);
+        }
+
+        public void Delete()
+        {
+            MessageView.ShowTask($"delete object to ID = {_property.Item.Id}?", DeleteServer, Close);
+        }
+
+        private async Task DeleteServer()
+        {
+            await ModelDatabase.DeleteObject(_property.Item);
+
+            _property.UpdateOnChanger();
         }
 
         private async Task SaveServer()

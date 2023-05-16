@@ -11,6 +11,7 @@ using System.Linq;
 using Assets.View.Body.FullScreen.OptionsWindow;
 using TMPro;
 using Assets.View.Body.FullScreen.OptionsWindow.History;
+using Assets.View.Body.FullScreen.MessageTask;
 
 namespace Assets.View.Body.Machine
 {
@@ -53,6 +54,10 @@ namespace Assets.View.Body.Machine
         [SerializeField]
         private VerticalMachine _verticalMachine;
 
+        [Header("Edit Body")]
+        [SerializeField]
+        private GameObject _editBody;
+
         /// <summary>
         /// Имя используется в анализе
         /// </summary>
@@ -78,6 +83,22 @@ namespace Assets.View.Body.Machine
             base.Awake();
 
             _singleton = this;
+        }
+
+        private void Start()
+        {
+            OnPanelOpen += UpdateOpen;
+            OnPanelClose += UpdateClose;
+        }
+
+        private void UpdateClose()
+        {
+            _editBody.SetActive(false);
+        }
+
+        private void UpdateOpen()
+        {
+            _verticalMachine.UpdateDatasOnChanger();
         }
 
         public static void FocusMachine(MachineBehaviour machine, OptionProperty option)
@@ -165,5 +186,11 @@ namespace Assets.View.Body.Machine
         public static bool IsRoot(string root)
             => ManagementAssistant.AccessAccount["Машиное отделение"].Contains("all") || ManagementAssistant.AccessAccount["Машиное отделение"].Contains(root);
 
+
+        private void OnDestroy()
+        {
+            OnPanelOpen -= UpdateOpen;
+            OnPanelClose -= UpdateClose;
+        }
     }
 }
