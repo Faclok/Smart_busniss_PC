@@ -6713,6 +6713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _controllField: {fileID: 867158520438466643}
+  _buttonDelete: {fileID: 5568916409821624237}
 --- !u!1 &6796174864504065389
 GameObject:
   m_ObjectHideFlags: 0

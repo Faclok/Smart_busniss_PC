@@ -6,7 +6,7 @@ using UnityEngine;
 using Assets.View.Body.FullScreen.Fields;
 using System.Threading.Tasks;
 using Assets.View.Body.FullScreen.MessageTask;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace Assets.View.Body.FullScreen.EditWindow
 {
@@ -27,6 +27,8 @@ namespace Assets.View.Body.FullScreen.EditWindow
         {
             _lineRender = linerender;
             linerender?.SetActive(false);
+
+            _buttonDelete.interactable = property.IsDelete;
 
             _property = property;
             _controllField.UpdateData(_property.Elements);

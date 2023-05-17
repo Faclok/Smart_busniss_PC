@@ -3,16 +3,17 @@ using Assets.Model;
 using System;
 using System.Collections.Generic;
 using Assets.MultiSetting;
+using UnityEngine;
 
 namespace Assets.ViewModel.PullDatas
 {
-    public class PriceChangePull : IItemDatabase, IPullItem
+    public class PriceChangePull : IItemDatabase, IPullItem, ILinkToObject
     {
         public static Dictionary<string, string> ColumnsCreat => new(StringComparer.InvariantCultureIgnoreCase)
         {
 
             ["id"] = string.Empty,
-            ["idProduct"] = string.Empty,
+            [COLUMN_LINK] = string.Empty,
             [COLUMN_DATE] =string.Empty,
             ["state"] = string.Empty,
             ["priceNew"] = string.Empty,
@@ -21,12 +22,45 @@ namespace Assets.ViewModel.PullDatas
 
         public const string COLUMN_DATE = "readingTime";
 
+        public const string COLUMN_LINK = "idProduct";
+
         public string ColumnDate => COLUMN_DATE;
 
         public const string TABLE = "priceChangePull";
 
         public string Table => TABLE;
 
+        public int PriceChanger
+        {
+            get
+            {
+                var value = int.Parse(this["priceNew"]) - int.Parse(this["pricePrev"]);
+
+                return value >= 0 ? value : value * -1;
+            }
+        }
+
         public Dictionary<string, string> Columns { get; set; } = ColumnsCreat;
+
+        public string ColumnLink => COLUMN_LINK;
+
+        public int Link => int.Parse(this[COLUMN_LINK]);
+
+        public string this[string column]
+        {
+            get
+            {
+                if (Columns.ContainsKey(column))
+                    return Columns[column];
+
+                new Result(exception: $"no instaite column! message: {column}", TypeException.LogicApplication);
+                return column;
+            }
+            set
+            {
+                if (Columns.ContainsKey(column)) Columns[column] = value;
+                else new Result(exception: $"no instaite column! message: {column}", TypeException.LogicApplication);
+            }
+        }
     }
 }

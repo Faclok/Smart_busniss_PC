@@ -15,3 +15,4 @@ MonoBehaviour:
   itemsInPackScriptableObject:
   - {fileID: 11400000, guid: 15f18795ae7b4004ca8b47c5dec49fe1, type: 2}
   - {fileID: 11400000, guid: 535041ae1fb7d0e4eb78b9691ff3396b, type: 2}
+  - {fileID: 11400000, guid: dfd2f1f8add7fd74c8cd3f6ef7cb0fb2, type: 2}
