@@ -84,7 +84,7 @@ namespace Assets.View.Body.Analyst
 
         private async Task<float[]> FuncLoadGraphicAsync(DateTime start, DateTime end)
         {
-            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<PriceChangePull>(PriceChangePull.TABLE, PriceChangePull.COLUMN_LINK, Data, PriceChangePull.COLUMN_DATE, start, end, true));
+            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<PriceChangePull>(PriceChangePull.TABLE, PriceChangePull.COLUMN_LINK, Data, PriceChangePull.COLUMN_DATE, start, end));
 
             var values = data.Select(o => (float)o.PriceChanger).ToArray();
             var maxValue = values.Length > 0 ? values.Max<float>() : 0f;
@@ -98,7 +98,7 @@ namespace Assets.View.Body.Analyst
 
         private async Task<(string LastActive, string TimeLastActive)> GetLastActive()
         {
-            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<PriceChangePull>(PriceChangePull.TABLE, PriceChangePull.COLUMN_LINK, Data, PriceChangePull.COLUMN_DATE, DateTime.MinValue, DateTime.Now, true));
+            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<PriceChangePull>(PriceChangePull.TABLE, PriceChangePull.COLUMN_LINK, Data, PriceChangePull.COLUMN_DATE, DateTime.MinValue, DateTime.Now));
 
             if (data.Length <= 0)
                 return ("no history", "no time");
@@ -108,7 +108,7 @@ namespace Assets.View.Body.Analyst
 
         private async Task<HistoryData[]> GetHistoryAsync(DateTime start, DateTime end)
         {
-            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<PriceChangePull>(PriceChangePull.TABLE, PriceChangePull.COLUMN_LINK, Data, PriceChangePull.COLUMN_DATE, start, end, true));
+            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<PriceChangePull>(PriceChangePull.TABLE, PriceChangePull.COLUMN_LINK, Data, PriceChangePull.COLUMN_DATE, start, end));
             var result = data.Select(o =>
             new HistoryData
             (

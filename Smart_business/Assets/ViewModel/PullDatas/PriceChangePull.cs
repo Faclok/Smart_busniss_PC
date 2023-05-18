@@ -30,13 +30,24 @@ namespace Assets.ViewModel.PullDatas
 
         public string Table => TABLE;
 
-        public int PriceChanger
+        public decimal PriceChanger
         {
             get
             {
-                var value = int.Parse(this["priceNew"]) - int.Parse(this["pricePrev"]);
+                var value = decimal.Parse(this["priceNew"]) - decimal.Parse(this["pricePrev"]);
 
                 return value >= 0 ? value : value * -1;
+            }
+        }
+
+        public decimal PriceChangerProcent
+        {
+            get
+            {
+                var pricePrev = decimal.Parse(this["pricePrev"]);
+                var valueSpacing = decimal.Parse(this["priceNew"]) - pricePrev;
+
+                return Math.Round((valueSpacing / pricePrev) * 100M, 2);
             }
         }
 

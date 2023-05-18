@@ -82,21 +82,13 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             else
             {
                 float distance = width / (values.Length - 1);
-                Debug.Log($"width: {width}");
-                Debug.Log($"Disctance:  {distance}");
-                Debug.Log($"Count: {values.Length}");
-                Debug.Log($"Delenia: {values.Length - 1}");
-
                 _lineRender.positionCount = values.Length;
 
                 _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = values[0] > values[^1] ? _stonksColor : _noStonksColor;
 
 
                 for (int i = 0; i < values.Length; i++)
-                {
                     _lineRender.SetPosition(i, new Vector3(i * distance, values[i] * height, _distanceZ));
-                    Debug.Log($"{i}) x: {i * distance}");
-                }
             }
         }
 

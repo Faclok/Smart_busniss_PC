@@ -16,3 +16,4 @@ MonoBehaviour:
   _panelConent:
   - {fileID: 4322868259159178226, guid: a8c83a798bbe95149837b2d31f98a56e, type: 3}
   - {fileID: 9053028984021765360, guid: 37ffcc76e1cd1014ca0be7652e0ec2c2, type: 3}
+  - {fileID: 539674275770324833, guid: 82d52e68c714b884eacc9dc34d627366, type: 3}

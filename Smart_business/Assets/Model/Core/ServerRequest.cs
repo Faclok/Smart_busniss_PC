@@ -62,6 +62,8 @@ namespace Assets.Model
             if (_connection.State != ConnectionState.Open)
                 return new(exception: "connected close server", TypeException.DisconnectedServer);
 
+            Debug.Log(property.Request);
+
             try
             {
                 using var connection = new MySqlConnection(_connectionProperties);
