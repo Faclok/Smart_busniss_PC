@@ -24,6 +24,12 @@ namespace Assets.ViewModel.Datas
 
         public const string TABLE = "objectInStock";
 
+        public string Name => this["name"];
+
+        public string Amount => this["amount"];
+
+        public string CreatMachineSQL => $"{DateTime.Parse(Columns["dataSet"]):yyyy.MM.dd}";
+
         public string this[string column]
         {
             get
