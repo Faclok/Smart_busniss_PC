@@ -32,8 +32,8 @@ namespace Assets.View.Body.Product
             {
                 new ElementData("ID","id",newMachine["id"], isEdit: false, countSimbols: 7, isNumber:true),
                 _dataNameMachine = new ElementData("name","name",newMachine["name"],isEdit: true,countSimbols:20,isNumber: false),
-                new ElementData("Price", "price", "0", true, 7, true),
-                new ElementData("description","description","write description",isEdit:true,countSimbols: 1000, isNumber:false)
+                new ElementData("Цена", "price", "0", true, 7, true),
+                new ElementData("Описание","description","write description",isEdit:true,countSimbols: 1000, isNumber:false)
             }
             , ProductControll.UpdateDatasOnChangers, GetQuestion);
 
@@ -41,7 +41,7 @@ namespace Assets.View.Body.Product
         }
 
         private string GetQuestion()
-            => $"creat machine '{_dataNameMachine.Value}'?";
+            => $"Создать продукт с именем '{_dataNameMachine.Value}'?";
     }
 
 }

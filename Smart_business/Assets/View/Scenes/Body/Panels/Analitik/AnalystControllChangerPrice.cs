@@ -123,7 +123,7 @@ namespace Assets.View.Body.Analyst
 
         public void SetPrice(bool isUp)
         {
-            MessageView.ShowTask("changer price object?", () => CreatChangerServer(isUp), UpdateChanger);
+            MessageView.ShowTask("Изменить текущую цену?", () => CreatChangerServer(isUp), UpdateChanger);
         }
 
         private void UpdateChanger()

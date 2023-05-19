@@ -7851,7 +7851,13 @@ MonoBehaviour:
   gameObject: {fileID: 0}
   _titleText: {fileID: 5568916410879931096}
   _descriptionText: {fileID: 5568916410448280595}
-  _icons: []
+  _icons:
+  - _name: down
+    _icon: {fileID: 21300000, guid: 4a8924fac77685444a256f769e7d475a, type: 3}
+  - _name: up
+    _icon: {fileID: 21300000, guid: 478da2fc1c1a5ed41bfe4b4f451c6302, type: 3}
+  - _name: LastActive
+    _icon: {fileID: 21300000, guid: 1b900a5460bfe3444af98991dc03c253, type: 3}
   _defaultIcon: {fileID: 21300000, guid: d2bb4fac4db5005469a0755d77a775f6, type: 3}
   _option: {fileID: 3716373753787241083}
   _verticalProduct: {fileID: 5697930066370944212}

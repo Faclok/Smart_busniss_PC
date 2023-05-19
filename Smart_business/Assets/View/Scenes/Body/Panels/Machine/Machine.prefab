@@ -7966,7 +7966,13 @@ MonoBehaviour:
   gameObject: {fileID: 0}
   _titleText: {fileID: 5568916410879931096}
   _descriptionText: {fileID: 5568916410448280595}
-  _icons: []
+  _icons:
+  - _name: var
+    _icon: {fileID: 21300000, guid: 8fdb4a121932c924e83c2bf44f06f4d0, type: 3}
+  - _name: good
+    _icon: {fileID: 21300000, guid: f6cfb2f23fb447f449a42055cfc1a78c, type: 3}
+  - _name: LastActive
+    _icon: {fileID: 21300000, guid: 1b900a5460bfe3444af98991dc03c253, type: 3}
   _defaultIcon: {fileID: 21300000, guid: d2bb4fac4db5005469a0755d77a775f6, type: 3}
   _option: {fileID: 3716373753787241083}
   _verticalMachine: {fileID: 2437552280438153899}

@@ -75,8 +75,8 @@ namespace Assets.View.Body.Product
         public void Click()
         {
             var datas = new ElementData[] { new ElementData("ID","id",Data["id"],false,int.MaxValue.ToString().Length,true),
-                                            new ElementData("Name", "name",Data["name"], true,20),
-                                            new ElementData("Creat", "dataSet", Data.CreatMachineSQL, false,15),
+                                            new ElementData("Имя", "name",Data["name"], true,20),
+                                            new ElementData("Создан", "dataSet", Data.CreatMachineSQL, false,15),
                                             new ElementData("Описание","description",Data["description"],true, int.MaxValue)};
 
             var edit = new EditProperty(Data, datas, ProductControll.UpdateDatasOnChangers, ProductControll.IsRoot("delete"), () => $"edit '{datas[1].Value}'?");

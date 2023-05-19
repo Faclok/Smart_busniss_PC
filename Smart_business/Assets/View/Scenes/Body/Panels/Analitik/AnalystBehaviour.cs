@@ -71,9 +71,9 @@ namespace Assets.View.Body.Analyst
         public void Click()
         {
             var datas = new ElementData[] { new ElementData("ID","id",Data["id"],false,int.MaxValue.ToString().Length,true),
-                                            new ElementData("Name", "name",Data["name"], true,20),
-                                            new ElementData("Creat", "dataSet", Data.CreatMachineSQL, false,15),
-                                            new ElementData("Price", "price", Data.Price,true,7,true),
+                                            new ElementData("Имя", "name",Data["name"], true,20),
+                                            new ElementData("Создан", "dataSet", Data.CreatMachineSQL, false,15),
+                                            new ElementData("Цена", "price", Data.Price,true,7,true),
                                             new ElementData("Описание","description",Data["description"],true, int.MaxValue)};
 
             var edit = new EditProperty(Data, datas, AnalystControll.UpdateDatasOnChangers, AnalystControll.IsRoot("delete"), () => $"edit '{datas[1].Value}'?");

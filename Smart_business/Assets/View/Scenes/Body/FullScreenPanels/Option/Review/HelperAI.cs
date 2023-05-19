@@ -78,7 +78,12 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
                 _prognozField.text = answerPrognoz.Result;
                 _offerField.text = answerOffer.Result;
 
-            } //FIX
+            }
+            else
+            {
+                _prognozField.text = "загрузка...";
+                _offerField.text = "загрузка...";
+            }
             _upperAnimation.gameObject.SetActive(false);
         }
     }

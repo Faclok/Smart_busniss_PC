@@ -51,9 +51,9 @@ namespace Assets.View.Body.Product
             var elements = new ElementData[]
             {
                 new ElementData("ID","id",newMachine["id"], isEdit: false, countSimbols: 7, isNumber:true),
-                new ElementData("Client", "idClient", "-1", true, 7, true),
-                new ElementData("readingTime","readingTime",newMachine["readingTime"],isEdit:false,countSimbols: 1000, isNumber:false),
-                new ElementData("State", "state", "cancel", true, 7, false),
+                new ElementData("ID Клиента", "idClient", "-1", true, 7, true),
+                new ElementData("Создан","readingTime",newMachine["readingTime"],isEdit:false,countSimbols: 1000, isNumber:false),
+                new ElementData("Состояние", "state", "cancel", true, 7, false),
             };
 
             _fields.UpdateData(elements);
@@ -68,7 +68,7 @@ namespace Assets.View.Body.Product
 
         public void Create()
         {
-            MessageView.ShowTask($"create shop on price = '{PriceBox}'?", CreateServer, Replace);
+            MessageView.ShowTask($"Создать пакет на сумму = '{PriceBox}'??", CreateServer, Replace);
         }
 
         public void Replace()

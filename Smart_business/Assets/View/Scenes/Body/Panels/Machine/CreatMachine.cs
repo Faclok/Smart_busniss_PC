@@ -33,9 +33,9 @@ namespace Assets.View.Body.Machine
             {
                 new ElementData("ID","id",newMachine["id"], isEdit: false, countSimbols: 7, isNumber:true),
                 _dataNameMachine = new ElementData("name","name",newMachine["name"],isEdit: true,countSimbols:20,isNumber: false),
-                new ElementData("icon","icon",newMachine["icon"],isEdit: true, countSimbols:35, isNumber:false),
-                new ElementData("amount","amount",newMachine["amount"],isEdit:false, countSimbols:1,isNumber:true),
-                new ElementData("description","description","write description",isEdit:true,countSimbols: 1000, isNumber:false)
+                new ElementData("Иконка","icon",newMachine["icon"],isEdit: true, countSimbols:35, isNumber:false),
+                new ElementData("Количесво часов","amount",newMachine["amount"],isEdit:false, countSimbols:1,isNumber:true),
+                new ElementData("Описание","description","write description",isEdit:true,countSimbols: 1000, isNumber:false)
             }
             , MachineControll.UpdateDatasOnChangers, GetQuestion);
 
@@ -43,6 +43,6 @@ namespace Assets.View.Body.Machine
         }
 
         private string GetQuestion()
-            => $"creat machine '{_dataNameMachine.Value}'?";
+            => $"Создать машину с именем '{_dataNameMachine.Value}'?";
     }
 }
