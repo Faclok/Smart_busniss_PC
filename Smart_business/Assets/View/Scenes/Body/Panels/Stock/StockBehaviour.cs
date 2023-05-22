@@ -12,6 +12,7 @@ using Assets.View.Body.FullScreen.OptionsWindow.History;
 using Assets.ViewModel;
 using Assets.ViewModel.PullDatas;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Assets.View.Body.Stock
 {
@@ -89,14 +90,20 @@ namespace Assets.View.Body.Stock
         {
             var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<StockPull>(StockPull.TABLE, StockPull.COLUMN_LINK, Data, StockPull.COLUMN_DATE, start, end));
 
-            var values = data.Select(o => (float)o.Value).ToArray();
-            var maxValue = values.Length > 0 ? values.Max<float>() : 0f;
-            var result = new float[data.Length];
+            var dates = DateTimeCalculate.GetColumns(start, end);
 
-            for (int i = 0; i < data.Length; i++)
-                result[i] = values[i] / maxValue;
+            var list = new Dictionary<DateTimeCalculate.Range, List<int>>();
 
-            return result;
+            for (int i = 0; i < dates.Length; i++)
+                for (int q = 0; q < data.Length; q++)
+                {
+                    if (dates[i].Start >= start && dates[i].End <= end)
+                        if (list.ContainsKey(dates[i]))
+                            list[dates[i]].Add(data[q].Value);
+                        else list.Add(dates[i], new List<int>() { data[q].Value });
+                }
+
+            return DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
         }
 
         private async Task<(string LastActive, string TimeLastActive)> GetLastActive()

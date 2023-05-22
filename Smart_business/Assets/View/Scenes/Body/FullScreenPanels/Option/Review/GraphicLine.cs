@@ -2,12 +2,13 @@
 using System.Collections;
 using UnityEngine;
 using Assets.View.Body.Menu;
+using UnityEngine.UI;
 
 namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 {
     public class GraphicLine : MonoBehaviour
     {
-        [Header("Links")]
+        [Header("Line Render")]
         [SerializeField]
         private LineRenderer _lineRender;
 
@@ -40,6 +41,31 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private PanelContent _panelContent;
 
+        [Space(20f)]
+        [Header("Table")]
+        [Space(5f)]
+        [Header("Prefab")]
+        [SerializeField]
+        private Image _imageColumn;
+
+        [Header("Content")]
+        [SerializeField]
+        private Transform _contentColumns;
+
+        [SerializeField]
+        private RectTransform _rectTable;
+
+        [Header("Setting")]
+        [SerializeField]
+        private float _fixedWidth;
+
+        [SerializeField]
+        private GameObject _bodyTable;
+
+        private Image[] _columnsInstantiante = new Image[0];
+
+        private State _state = State.Line;
+
         private void Start()
         {
             _moveDate.OnDateChanged += OnMoveDate;
@@ -58,11 +84,20 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
         public void UpdateDraw(float[] values)
         {
-            if (_panelContent.IsFocus)
-                _bodyLineParent.SetActive(true);
+            if (_state == State.Line)
+            {
+                if (_panelContent.IsFocus)
+                    _bodyLineParent.SetActive(true);
 
-            _bodyLine.SetActive(true);
+                _bodyLine.SetActive(true);
+            }
 
+            UpdateDrawLine(values);
+            UpdateDrawTable(values);
+        }
+
+        private void UpdateDrawLine(float[] values)
+        {
             _gradient.m_color2 = _lineRender.startColor = values.Length > 0 ? _lineRender.endColor = values[0] > values[^1] ? _stonksColor : _noStonksColor : Color.white;
 
             _gradient.enabled = false; //Не знаю как еще раз вызвать отрисовку, т.к. объект не перерисовывается после изменения данных
@@ -71,26 +106,61 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             var width = _rectLine.rect.width;
             var height = _rectLine.rect.height;
 
-            if (values.Length < 2)
-            {
-                _lineRender.positionCount = 2;
-                _lineRender.SetPosition(0, new Vector3(0, height / 2f, _distanceZ));
-                _lineRender.SetPosition(1, new Vector3(width, height / 2f, _distanceZ));
+            float distance = width / (values.Length - 1);
+            _lineRender.positionCount = values.Length;
 
-                _gradient.m_color2 = _lineRender.endColor = _lineRender.startColor = Color.white;
+            switch (values[0] - values[^1])
+            {
+                case > 0: _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = _stonksColor; break;
+                case < 0: _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = _noStonksColor; break;
+                case 0: _gradient.m_color2 = _lineRender.endColor = _lineRender.startColor = Color.white; break;
             }
-            else
+
+            for (int i = 0; i < values.Length; i++)
+                _lineRender.SetPosition(i, new Vector3(i * distance, values[i] * height, _distanceZ));
+        }
+
+        private void UpdateDrawTable(float[] values)
+        {
+            var width = _rectTable.rect.width;
+            var height = _rectTable.rect.height;
+            float distance = width / (values.Length - 1);
+            var newArray = InstantiateExtensions.GetOverwriteInstantiate(_imageColumn, _contentColumns, _columnsInstantiante, values);
+
+            for (int i = 0; i < newArray.Length; i++)
             {
-                float distance = width / (values.Length - 1);
-                _lineRender.positionCount = values.Length;
-
-                _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = values[0] > values[^1] ? _stonksColor : _noStonksColor;
-
-
-                for (int i = 0; i < values.Length; i++)
-                    _lineRender.SetPosition(i, new Vector3(i * distance, values[i] * height, _distanceZ));
+                newArray[i].rectTransform.sizeDelta = new Vector2(i * distance, values[i] * height);
+                newArray[i].color = UnityEngine.Random.ColorHSV(0f,1f, 0f, 1f, 0f, 1f, 1f, 1f);
             }
         }
+
+        public void TableFocus()
+        {
+            if (_state == State.Table)
+                return;
+
+            _bodyTable.SetActive(true);
+            _bodyLine.SetActive(false);
+
+            _state = State.Table;
+        }
+
+        public void LineFocus()
+        {
+            if (_state == State.Line)
+                return;
+
+            _bodyTable.SetActive(false);
+            _bodyLine.SetActive(true);
+
+            _state = State.Line;
+        }
+
+        public void EnableImage(Image image)
+             => image.color = Color.white;
+
+        public void DisableImage(Image image)
+            => image.color = Color.gray;
 
         private void OnDestroy()
         {
@@ -98,5 +168,8 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             _panelContent.OnPanelOpen -= Enable;
             _moveDate.OnDateChanged -= OnMoveDate;
         }
+
+        private enum State
+        { Line, Table }
     }
 }

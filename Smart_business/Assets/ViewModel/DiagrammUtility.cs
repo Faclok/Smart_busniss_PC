@@ -2,6 +2,36 @@ using System.Linq;
 
 public static class DiagrammUtility
 {
+    public static float[] GetColumns(int[][] columnsData)
+    {
+        var columnsReturn = new float[columnsData.Length];
+
+        for (int i = 0; i < columnsData.Length; i++)
+            columnsReturn[i] = (float)columnsData[i].Sum() / (float)columnsData[i].Length;
+
+        return GetPoints(columnsReturn);
+    }
+
+    public static float[] GetColumns(double[][] columnsData)
+    {
+        var columnsReturn = new float[columnsData.Length];
+
+        for (int i = 0; i < columnsData.Length; i++)
+            columnsReturn[i] = (float)columnsData[i].Sum() / (float)columnsData[i].Length;
+
+        return GetPoints(columnsReturn);
+    }
+
+    public static float[] GetColumns(decimal[][] columnsData)
+    {
+        var columnsReturn = new float[columnsData.Length];
+
+        for (int i = 0; i < columnsData.Length; i++)
+            columnsReturn[i] = (float)columnsData[i].Sum() / (float)columnsData[i].Length;
+
+        return GetPoints(columnsReturn);
+    }
+
     public static float[] GetPoints(int[] array)
     {
         float[] returnArray = new float[array.Length];
@@ -9,7 +39,19 @@ public static class DiagrammUtility
         float max = array.Max();
 
         for (int i = 0; i < array.Length; i++)
-            returnArray[i] = (float)array[i] / max;
+            returnArray[i] = array[i] / max;
+
+        return returnArray;
+    }
+
+    public static float[] GetPoints(float[] array)
+    {
+        float[] returnArray = new float[array.Length];
+
+        float max = array.Max();
+
+        for (int i = 0; i < array.Length; i++)
+            returnArray[i] = array[i] / max;
 
         return returnArray;
     }
