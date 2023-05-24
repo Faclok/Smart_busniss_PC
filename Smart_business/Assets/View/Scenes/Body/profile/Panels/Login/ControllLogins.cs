@@ -28,9 +28,6 @@ namespace Assets.View.Body.Profile.Login
         [SerializeField]
         private Button _updateButton;
 
-        [SerializeField]
-        private MessageView _messageView;
-
         private static ControllLogins _singleton;
 
         private LoginBehaviour[] _instantiateBehaviour = new LoginBehaviour[0];
@@ -95,7 +92,7 @@ namespace Assets.View.Body.Profile.Login
         public void Delete(LoginPull loginPull)
         {
             _deleteCurrent = loginPull;
-            _messageView.Show("disable?",DeleteServer,Close);
+            MessageView.ShowTask("disable?",DeleteServer,Close);
         }
 
         private  Task DeleteServer()

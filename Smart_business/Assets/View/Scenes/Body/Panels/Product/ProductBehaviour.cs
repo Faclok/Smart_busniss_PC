@@ -96,13 +96,12 @@ namespace Assets.View.Body.Product
             var list = new Dictionary<DateTimeCalculate.Range, List<double>>();
 
             for (int i = 0; i < dates.Length; i++)
-                for (int q = 0; q < data.Length; q++)
-                {
-                    if (dates[i].Start >= start && dates[i].End <= end)
-                        if (list.ContainsKey(dates[i]))
-                            list[dates[i]].Add(float.Parse(data[q].Columns["priceConst"]));
-                        else list.Add(dates[i], new List<double>() { float.Parse(data[q].Columns["priceConst"]) });
-                }
+                list.Add(dates[i], new List<double>() { 0.01d });
+
+            for (int q = 0; q < data.Length; q++)
+                for (int i = 0; i < dates.Length; i++)
+                    if (dates[i].Start <= data[q].ReadingTime)
+                        list[dates[i]].Add(values[q]);
 
             return DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
         }

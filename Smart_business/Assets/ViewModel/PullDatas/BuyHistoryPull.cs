@@ -27,6 +27,8 @@ namespace Assets.ViewModel.PullDatas
 
         public string Price => Columns["priceConst"];
 
+        public DateTime ReadingTime => DateTime.Parse(Columns[COLUMN_DATE]);
+
         public Dictionary<string, string> Columns { get; set; } = ColumnsCreat;
 
         public const string TABLE = "buyHistoryPull";

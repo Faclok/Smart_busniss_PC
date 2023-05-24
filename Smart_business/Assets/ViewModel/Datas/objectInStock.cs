@@ -19,7 +19,7 @@ namespace Assets.ViewModel.Datas
             ["amount"] = string.Empty
         };
 
-        public Dictionary<string, string> Columns { get; set; }
+        public Dictionary<string, string> Columns { get; set; } = ColumnsCreat;
         public string Table => TABLE;
 
         public const string TABLE = "objectInStock";

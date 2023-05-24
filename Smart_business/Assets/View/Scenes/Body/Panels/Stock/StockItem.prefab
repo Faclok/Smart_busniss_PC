@@ -127,8 +127,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Assets.View.Body.Machine.MachineBehaviour, Assembly-CSharp
+      - m_Target: {fileID: 5357999458395458442}
+        m_TargetAssemblyTypeName: Assets.View.Body.Stock.StockBehaviour, Assembly-CSharp
         m_MethodName: Click
         m_Mode: 1
         m_Arguments:

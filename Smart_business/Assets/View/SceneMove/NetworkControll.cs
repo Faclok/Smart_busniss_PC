@@ -70,7 +70,7 @@ namespace Assets.View.SceneMove
         /// </summary>
         private void OnDestroy()
         {
-            TimerDispatcher.TimerDelete();       
+            TimerDispatcher.TimerDelete();
         }
     }
 }

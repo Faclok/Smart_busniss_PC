@@ -27,7 +27,9 @@ namespace Assets.ViewModel.PullDatas
 
         public string ColumnDate => COLUMN_DATE;
 
-        public int Value => int.Parse(Columns["values"]);
+        public DateTime ReadingTime => DateTime.Parse(Columns[COLUMN_DATE]);
+
+        public int Value => int.Parse(Columns["value"]);
 
         public Dictionary<string, string> Columns { get; set; } = ColumnsCreat;
 

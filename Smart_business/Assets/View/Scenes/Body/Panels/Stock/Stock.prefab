@@ -8372,7 +8372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 131118851f315c941bb5d962f4630017, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _title: "\u0421\u043F\u0438\u0441\u043E\u043A \u044D\u043B\u0435\u043C\u043D\u0442\u043E\u0432"
+  _title: "\u0421\u043F\u0438\u0441\u043E\u043A \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432"
   gameObject: {fileID: 0}
   _titleText: {fileID: 5568916410879931096}
   _descriptionText: {fileID: 5568916410448280595}

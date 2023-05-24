@@ -76,7 +76,7 @@ namespace Assets.View.Body.Stock
         {
             var datas = new ElementData[] { new ElementData("ID","id",Data["id"],false,int.MaxValue.ToString().Length,true),
                                             new ElementData("Name", "name",Data["name"], true,20),
-                                            new ElementData("Creat", "dataSet", Data.CreatMachineSQL, false,15),
+                                            new ElementData("Creat", StockPull.COLUMN_DATE, Data.CreatMachineSQL, false,15),
                                             new ElementData("Icon", "icon", Data["icon"], true, 60),
                                             new ElementData("Описание","description",Data["description"],true, int.MaxValue)};
 
@@ -92,16 +92,15 @@ namespace Assets.View.Body.Stock
 
             var dates = DateTimeCalculate.GetColumns(start, end);
 
-            var list = new Dictionary<DateTimeCalculate.Range, List<int>>();
+            var list = new Dictionary<DateTimeCalculate.Range, List<double>>();
 
             for (int i = 0; i < dates.Length; i++)
-                for (int q = 0; q < data.Length; q++)
-                {
-                    if (dates[i].Start >= start && dates[i].End <= end)
-                        if (list.ContainsKey(dates[i]))
-                            list[dates[i]].Add(data[q].Value);
-                        else list.Add(dates[i], new List<int>() { data[q].Value });
-                }
+                list.Add(dates[i], new List<double>() { 0.01d });
+
+            for (int q = 0; q < data.Length; q++)
+                for (int i = 0; i < dates.Length; i++)
+                    if (dates[i].Start <= data[q].ReadingTime)
+                        list[dates[i]].Add(data[q].Value);
 
             return DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
         }
@@ -113,7 +112,7 @@ namespace Assets.View.Body.Stock
             if (data.Length <= 0)
                 return ("no history", "no time");
 
-            return (data[^1].Value.ToString(), $"{DateTime.Parse(data[^1].Columns["dateSet"]):HH:mm dd.MM.yy}");
+            return (data[^1].Value.ToString(), $"{DateTime.Parse(data[^1].Columns[StockPull.COLUMN_DATE]):HH:mm dd.MM.yy}");
         }
 
         private async Task<HistoryData[]> GetHistoryAsync(DateTime start, DateTime end)
@@ -125,7 +124,7 @@ namespace Assets.View.Body.Stock
             (
                 StockControll.GetIcon(o.Columns["state"]),
                 o.Value.ToString(),
-                $"{DateTime.Parse(o.Columns["dateSet"]):HH:mm dd.MM.yy}")
+                $"{DateTime.Parse(o.Columns[StockPull.COLUMN_DATE]):HH:mm dd.MM.yy}")
             ).ToArray();
 
             return result;

@@ -10,7 +10,7 @@ namespace Assets.View.Body.Profile
     /// <summary>
     /// Контроль данных пользователя
     /// </summary>
-    public class ProfileControll : PanelContent
+    public class ProfileControll : MonoBehaviour
     {
 
         /// <summary>
@@ -24,12 +24,44 @@ namespace Assets.View.Body.Profile
         /// </summary>
         [SerializeField] private TextMeshProUGUI _apointment;
 
+        private bool isoOpen = false;
+
+        public void Open()
+        {
+            if (isoOpen)
+            {
+                DoubleOpen();
+                return;
+            }
+
+            PanelContent.OnPanel += Close;
+
+            PanelContent.DisableCurrent();
+
+            isoOpen = true;
+            transform.SetAsLastSibling();
+        }
+
+        private void DoubleOpen()
+        {
+            isoOpen = false;
+            PanelContent.EnableCurrent();
+            transform.SetSiblingIndex(transform.parent.childCount - 2);
+            Close();
+        }
+
+        public void Close()
+        {
+            isoOpen = false;
+
+            PanelContent.OnPanel -= Close;
+        }
+
         /// <summary>
         /// Пробуждение объекта
         /// </summary>
-        public override void Awake()
+        public void Awake()
         {
-            base.Awake();
             UpdateInfo();
         }
 

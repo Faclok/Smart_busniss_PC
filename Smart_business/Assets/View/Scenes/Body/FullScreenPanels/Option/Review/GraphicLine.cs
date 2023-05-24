@@ -94,11 +94,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
             UpdateDrawLine(values);
             UpdateDrawTable(values);
-
-            for (int i = 0; i < values.Length; i++)
-            {
-                Debug.Log(values[i]);
-            }
         }
 
         private void UpdateDrawLine(float[] values)
@@ -140,12 +135,12 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             var width = _rectTable.rect.width;
             var height = _rectTable.rect.height;
             float distance = width / (values.Length - 1);
-            var newArray = InstantiateExtensions.GetOverwriteInstantiate(_imageColumn, _contentColumns, _columnsInstantiante, values);
+            _columnsInstantiante = InstantiateExtensions.GetOverwriteInstantiate(_imageColumn, _contentColumns, _columnsInstantiante, values);
 
-            for (int i = 0; i < newArray.Length; i++)
+            for (int i = 0; i < _columnsInstantiante.Length; i++)
             {
-                newArray[i].rectTransform.sizeDelta = new Vector2(i * distance, values[i] * height);
-                newArray[i].color = UnityEngine.Random.ColorHSV(0f,1f, 0f, 1f, 0f, 1f, 1f, 1f);
+                _columnsInstantiante[i].rectTransform.sizeDelta = new Vector2(i * distance, values[i] * height);
+                _columnsInstantiante[i].color = UnityEngine.Random.ColorHSV(0f,1f, 0f, 1f, 0f, 1f, 1f, 1f);
             }
         }
 

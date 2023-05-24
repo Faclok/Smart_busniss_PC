@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public static class DiagrammUtility
@@ -14,6 +16,15 @@ public static class DiagrammUtility
 
     public static float[] GetColumns(double[][] columnsData)
     {
+        if (!columnsData.Select(o => o.Select(b => b == 0.01d)).Any(o=> o.Any(q => q == false)))
+        {
+            var list = new List<float>(29);
+            for (int i = 0; i < list.Capacity; i++)
+                list.Add(0f);
+
+            return list.ToArray();
+        }
+
         var columnsReturn = new float[columnsData.Length];
 
         for (int i = 0; i < columnsData.Length; i++)

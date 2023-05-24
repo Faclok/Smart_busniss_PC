@@ -114,8 +114,6 @@ namespace Assets.View.Body.Machine
                     if (dates[i].Start <= data[q].StartJob)
                             list[dates[i]].Add(data[q].TimeSpan.TotalHours);
 
-            Debug.Log(dates.Length);
-
             return DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
         }
 
