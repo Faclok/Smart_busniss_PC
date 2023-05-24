@@ -94,6 +94,11 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
             UpdateDrawLine(values);
             UpdateDrawTable(values);
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                Debug.Log(values[i]);
+            }
         }
 
         private void UpdateDrawLine(float[] values)
@@ -106,18 +111,28 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             var width = _rectLine.rect.width;
             var height = _rectLine.rect.height;
 
-            float distance = width / (values.Length - 1);
-            _lineRender.positionCount = values.Length;
-
-            switch (values[0] - values[^1])
+            if (values.Length > 0)
             {
-                case > 0: _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = _stonksColor; break;
-                case < 0: _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = _noStonksColor; break;
-                case 0: _gradient.m_color2 = _lineRender.endColor = _lineRender.startColor = Color.white; break;
-            }
+                switch (values[0] - values[^1])
+                {
+                    case > 0: _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = _stonksColor; break;
+                    case < 0: _gradient.m_color2 = _lineRender.startColor = _lineRender.endColor = _noStonksColor; break;
+                    case 0: _gradient.m_color2 = _lineRender.endColor = _lineRender.startColor = Color.white; break;
+                }
 
-            for (int i = 0; i < values.Length; i++)
-                _lineRender.SetPosition(i, new Vector3(i * distance, values[i] * height, _distanceZ));
+                float distance = width / (values.Length - 1);
+                _lineRender.positionCount = values.Length;
+
+                for (int i = 0; i < values.Length; i++)
+                    _lineRender.SetPosition(i, new Vector3(i * distance, values[i] * height, _distanceZ));
+            }
+            else
+            {
+                _lineRender.positionCount = 2;
+
+                _lineRender.SetPosition(0, new Vector3(0f,0f,_distanceZ));
+                _lineRender.SetPosition(1, new Vector3(width,0f,_distanceZ));
+            }
         }
 
         private void UpdateDrawTable(float[] values)

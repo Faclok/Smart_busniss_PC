@@ -29,7 +29,6 @@ namespace Assets.Model
                 using var connection = new MySqlConnection(_connectionProperties);
                 await connection.OpenAsync();
 
-                Debug.Log(property.Request);
                 using var command = new MySqlCommand(property.Request, connection);
 
                 using var read = await command.ExecuteReaderAsync();
@@ -61,8 +60,6 @@ namespace Assets.Model
 
             if (_connection.State != ConnectionState.Open)
                 return new(exception: "connected close server", TypeException.DisconnectedServer);
-
-            Debug.Log(property.Request);
 
             try
             {

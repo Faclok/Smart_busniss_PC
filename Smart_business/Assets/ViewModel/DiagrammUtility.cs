@@ -36,16 +36,19 @@ public static class DiagrammUtility
     {
         float[] returnArray = new float[array.Length];
 
-        float max = array.Max();
+        float max = (float)array.Max();
 
         for (int i = 0; i < array.Length; i++)
-            returnArray[i] = array[i] / max;
+            returnArray[i] = (float)array[i] / max;
 
         return returnArray;
     }
 
     public static float[] GetPoints(float[] array)
     {
+        if(array.Length == 0)
+            return new float[0];
+
         float[] returnArray = new float[array.Length];
 
         float max = array.Max();

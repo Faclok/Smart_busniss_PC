@@ -14,7 +14,7 @@ namespace Assets.View
 
         public static TResult[] GetOverwriteInstantiate<TResult, TValue>(TResult prefab, Transform content, TResult[] oldArray, TValue[] newArray)
             where TResult : MonoBehaviour
-       => GetOverwriteInstantiate(prefab,content,oldArray, newArray);
+       => GetOverwriteInstantiate(prefab,content,oldArray, newArray.Length);
 
         public static TResult[] GetOverwriteInstantiate<TResult>(TResult prefab, Transform content, TResult[] oldArray, int counNewArray)
            where TResult : MonoBehaviour
