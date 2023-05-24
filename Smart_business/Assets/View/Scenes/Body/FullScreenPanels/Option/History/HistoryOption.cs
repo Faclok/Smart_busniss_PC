@@ -41,7 +41,7 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.History
         private void OnDateMove(DateTime start, DateTime end)
         {
 
-            if(_callLoad != null ) 
+            if(_callLoad != null) 
             _callLoad(start, end).GetTaskCompleted(OnCompletedTask);
 
             _controllLoadAnimation.ShowItems();

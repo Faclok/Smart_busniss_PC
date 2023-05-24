@@ -19,6 +19,10 @@ namespace Assets.ViewModel.PullDatas
 
         public const string COLUMN_DATE = "dateEnd";
 
+        public DateTime StartJob => DateTime.Parse(Columns["dateStart"]);
+
+        public DateTime EndJob => DateTime.Parse(Columns[COLUMN_DATE]);
+
         public string ColumnDate => COLUMN_DATE;
 
         public Dictionary<string, string> Columns { get; set; } = ColumnCreat;

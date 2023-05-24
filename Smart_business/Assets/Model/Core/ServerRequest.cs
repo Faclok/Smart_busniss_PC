@@ -8,6 +8,7 @@ using Assets.MultiSetting;
 using Assets.Model.RequestData;
 using System;
 using UnityEngine;
+using System.Threading;
 
 namespace Assets.Model
 {
@@ -17,6 +18,8 @@ namespace Assets.Model
     /// </summary>
     public static partial class Server
     {
+        private static readonly SemaphoreSlim _semaphoreSlim = new(1);
+
         public static async Task<ResultOf<TResult[]>> ActionResultOfData<TProperty, TResult>(TProperty property)
             where TProperty : PropertyRequest, IActionResultOf<TResult>
             where TResult : class, IItemDatabase, new()
@@ -24,6 +27,7 @@ namespace Assets.Model
             if (_connection.State != ConnectionState.Open)
                 return new(exception: "connected close server", TypeException.DisconnectedServer);
 
+            await _semaphoreSlim.WaitAsync();
             try
             {
                 using var connection = new MySqlConnection(_connectionProperties);
@@ -46,10 +50,12 @@ namespace Assets.Model
                         data.Columns[keys[i]] = read.GetString(keys[i]);
                 }
 
+                _semaphoreSlim.Release();
                 return new ResultOf<TResult[]>(datas.ToArray());
             }
             catch (Exception exp)
             {
+                _semaphoreSlim.Release();
                 return new ResultOf<TResult[]>(exception: $"{property.Name} [{property.Type.Name}]:{exp.Message}", TypeException.DisconnectedServer);
             }
         }

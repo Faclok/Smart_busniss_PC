@@ -50,6 +50,19 @@ namespace Assets.Model.RequestData
             Link = link;
         }
 
+        public PullLinkProperty(string name, string table, string columnLink, int link, string columnStart,string columnEnd, DateTime start, DateTime end, bool isLike = false)
+           : base($"SELECT * FROM {table} WHERE {columnLink} {GetWhereValue(link, isLike)} AND {columnStart} BETWEEN '{start:s}' AND '{end:s}' AND {columnEnd} BETWEEN '{start:s}' AND '{end:s}'")
+        {
+            Name = name;
+            Type = typeof(TResult);
+            Table = table;
+            ColumnDate = columnEnd;
+            StartSearch = $"{start:s}";
+            EndSearch = $"{end:s}";
+            ColumnLink = columnLink;
+            Link = link;
+        }
+
         public static string GetWhereValue(int link, bool isLike)
         {
             if (!isLike)

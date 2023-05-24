@@ -15,16 +15,16 @@ namespace Assets.ViewModel
 
             return days switch
             {
-                >= 361d => Parse(() => start.AddDays(days / 29d)),
-                >= 360d => Parse(() => start.AddDays(12.41d)),
-                >= 160d => Parse(() => start.AddDays(5.517d)),
-                >= 30d => Parse(() => start.AddHours(24.88d)),
-                >= 7d => Parse(() => start.AddHours(7)),
-                >= 1d => Parse(() => start.AddMinutes(49)),
-                _ => new Range[0],
+                >= 361d => Parse(start, start.AddDays(days / 29d).Subtract(start)),
+                >= 360d => Parse(start, start.AddDays(12.41d).Subtract(start)),
+                >= 160d => Parse(start, start.AddDays(5.517d).Subtract(start)),
+                >= 30d => Parse(start, start.AddHours(24.88d).Subtract(start)),
+                >= 7d => Parse(start, start.AddHours(7).Subtract(start)),
+                >= 1d => Parse(start, start.AddMinutes(49).Subtract(start)),
+                _ => Parse(start, start.AddMinutes(49).Subtract(start))
             };
 
-            static Range[] Parse(Func<DateTime> func)
+            static Range[] Parse(DateTime start ,TimeSpan tap)
             {
                 var dates = new DateTime[29, 2];
                 var result = new Range[29];
@@ -34,7 +34,7 @@ namespace Assets.ViewModel
 
                 for (int i = 0; i < rows; i++)
                     for (int j = 0; j < columns; j++)
-                        dates[i, j] = func();
+                        dates[i, j] = start += tap;
 
                 for (int i = 0; i < rows; i++)
                     result[i] = new Range(dates[i, 0], dates[i, 1]);

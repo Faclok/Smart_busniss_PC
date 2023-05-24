@@ -100,20 +100,21 @@ namespace Assets.View.Body.Machine
 
         private async Task<float[]> FuncLoadGraphicAsync(DateTime start, DateTime end)
         {
-            var data = await Task.Run(()=> ModelDatabase.GetPullLinkObjectAsync<MachineWorkPull>(MachineWorkPull.TABLE,MachineWorkPull.COLUMN_LINK,Data, MachineWorkPull.COLUMN_DATE, start, end));
+            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<MachineWorkPull>(MachineWorkPull.TABLE, MachineWorkPull.COLUMN_LINK, Data, "dateStart", MachineWorkPull.COLUMN_DATE, start, end));
 
             var dates = DateTimeCalculate.GetColumns(start, end);
 
             var list = new Dictionary<DateTimeCalculate.Range, List<double>>();
 
             for (int i = 0; i < dates.Length; i++)
-                for (int q = 0; q < data.Length; q++)
-                {
-                    if (dates[i].Start >= start && dates[i].End <= end)
-                        if (list.ContainsKey(dates[i]))
+                list.Add(dates[i],new List<double>() { 0.01d });
+
+            for (int q = 0; q < data.Length; q++)
+                for (int i = 0; i < dates.Length; i++)
+                    if (dates[i].Start <= data[q].StartJob)
                             list[dates[i]].Add(data[q].TimeSpan.TotalHours);
-                        else list.Add(dates[i], new List<double>() { data[q].TimeSpan.TotalHours });
-                }
+
+            Debug.Log(dates.Length);
 
             return DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
         }
@@ -130,8 +131,8 @@ namespace Assets.View.Body.Machine
 
         private async Task<HistoryData[]> GetHistoryAsync(DateTime start, DateTime end)
         {
-            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<MachineWorkPull>(MachineWorkPull.TABLE, MachineWorkPull.COLUMN_LINK, Data, MachineWorkPull.COLUMN_DATE,start, end));
-
+            var data = await Task.Run(() => ModelDatabase.GetPullLinkObjectAsync<MachineWorkPull>(MachineWorkPull.TABLE, MachineWorkPull.COLUMN_LINK, Data, "dateStart", MachineWorkPull.COLUMN_DATE,start, end));
+            
             var result = data.Select(o =>
             new HistoryData
             (
