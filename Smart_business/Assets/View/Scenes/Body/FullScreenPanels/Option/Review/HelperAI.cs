@@ -42,11 +42,20 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private ItemAnimation _upperAnimation;
 
+        [Header("move")]
+        [SerializeField]
+        private MoveDate _move;
+
         public string Prognoz { get; private set; } = string.Empty;
 
         public string Offer { get; private set; } = string.Empty;
 
         private DateTime _activeTime;
+
+        private void Awake()
+        {
+            _move.OnDateChanged += UpdateDate;
+        }
 
         private void UpdateDate(DateTime start, DateTime end)
         {
@@ -54,37 +63,32 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
 
             _upperAnimation.gameObject.SetActive(true);
             _upperAnimation.Play();
-
-
         }
 
         public async void UpdateText(float[] data)
         {
-            if (false)
-            {
-                var prognoz = _prognozRequest.Replace(_valueTaskReplace, string.Join("U+002C", data));
-                prognoz = prognoz.Replace(_dateTimeNowReplace, $"{DateTime.Today:d}");
-                prognoz = prognoz.Replace(_dateStartTimeReplace, $"{_activeTime: d}");
+            var prognoz = _prognozRequest.Replace(_valueTaskReplace, string.Join("U+002C", data));
+            prognoz = prognoz.Replace(_dateTimeNowReplace, $"{DateTime.Today:d}");
+            prognoz = prognoz.Replace(_dateStartTimeReplace, $"{_activeTime: d}");
 
-                var offer = _offerRequest.Replace(_valueTaskReplace, string.Join("U+002C", data));
-                offer = offer.Replace(_dateTimeNowReplace, $"{DateTime.Today:d}");
-                offer = offer.Replace(_dateStartTimeReplace, $"{_activeTime: d}");
+            var offer = _offerRequest.Replace(_valueTaskReplace, string.Join("U+002C", data));
+            offer = offer.Replace(_dateTimeNowReplace, $"{DateTime.Today:d}");
+            offer = offer.Replace(_dateStartTimeReplace, $"{_activeTime: d}");
 
-                var answerPrognoz = ChatGPT.GetAnswer(prognoz);
-                var answerOffer = ChatGPT.GetAnswer(offer);
+            var answerPrognoz = Task.Run(() => ChatGPT.GetAnswer(prognoz));
+            var answerOffer = Task.Run(() => ChatGPT.GetAnswer(offer));
 
-                await Task.WhenAll(answerPrognoz, answerOffer);
+            await Task.WhenAll(answerPrognoz, answerOffer);
 
-                _prognozField.text = answerPrognoz.Result;
-                _offerField.text = answerOffer.Result;
+            _prognozField.text = answerPrognoz.Result;
+            _offerField.text = answerOffer.Result;
 
-            }
-            else
-            {
-                _prognozField.text = "загрузка...";
-                _offerField.text = "загрузка...";
-            }
             _upperAnimation.gameObject.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            _move.OnDateChanged -= UpdateDate;
         }
     }
 }

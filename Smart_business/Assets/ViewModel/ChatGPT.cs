@@ -1,16 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
+using ChatGPTSharp;
 
 public static class ChatGPT
 {
+    private const string key = "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";
+
+    private static readonly ChatGPTClient _client = new(key);
+
+    private static readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1);
 
     public static async Task<string> GetAnswer(string request)
     {
-        await Task.Delay(0);
+        await semaphoreSlim.WaitAsync();
 
-        return string.Empty;
-        //FIX
+        var data = await _client.SendMessage(request);
+
+        semaphoreSlim.Release();
+
+        return data.Response;
     }
 }
