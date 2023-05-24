@@ -162,7 +162,7 @@ namespace Assets.View.Body.Stock
              (
                  GetIcon(o.Columns["state"]),
                  (machineDictionary.ContainsKey(o.Columns[o.ColumnLink]) ? machineDictionary[o.Columns[o.ColumnLink]].Name : "not found") + ": " + o.Value,
-                 $"{DateTime.Parse(o.Columns["dateSet"]):HH:mm dd.MM.yy}"
+                 $"{DateTime.Parse(o.Columns[StockPull.COLUMN_DATE]):HH:mm dd.MM.yy}"
                   )
              ).ToArray();
 

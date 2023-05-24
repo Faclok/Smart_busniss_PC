@@ -102,7 +102,8 @@ namespace Assets.View.Body.Stock
                     if (dates[i].Start <= data[q].ReadingTime)
                         list[dates[i]].Add(data[q].Value);
 
-            return DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
+            var value = DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
+            return value;
         }
 
         private async Task<(string LastActive, string TimeLastActive)> GetLastActive()
