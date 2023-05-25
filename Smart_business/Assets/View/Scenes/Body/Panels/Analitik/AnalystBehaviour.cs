@@ -89,16 +89,15 @@ namespace Assets.View.Body.Analyst
 
             var dates = DateTimeCalculate.GetColumns(start, end);
 
-            var list = new Dictionary<DateTimeCalculate.Range,List<decimal>>();
+            var list = new Dictionary<DateTimeCalculate.Range,List<decimal>>(dates.Length);
 
             for (int i = 0; i < dates.Length; i++)
-                for (int q = 0; q < data.Length; q++)
-                {
-                    if (dates[i].Start >= start && dates[i].End <= end)
-                        if (list.ContainsKey(dates[i]))
+                list.Add(dates[i], new() { 0.01m });
+
+            for (int q = 0; q < data.Length; q++)
+                for (int i = 0; i < dates.Length; i++)
+                    if (dates[i].Start >= data[i].ReadingTime)
                             list[dates[i]].Add(data[q].PriceChanger);
-                        else list.Add(dates[i],new List<decimal>() { data[q].PriceChanger });
-                }
 
             return DiagrammUtility.GetColumns(list.Values.Select(o => o.ToArray()).ToArray());
         }

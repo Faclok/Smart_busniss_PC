@@ -19,6 +19,8 @@ namespace Assets.View.Body.Profile
         [Header("Text Container")]
         [SerializeField] private TextMeshProUGUI _nameUser;
 
+        [SerializeField] private TextMeshProUGUI _nameMainPanel;
+
         /// <summary>
         /// Поле должности
         /// </summary>
@@ -72,7 +74,7 @@ namespace Assets.View.Body.Profile
         {
             var account = ManagementAssistant.Profile;
 
-            _nameUser.text = account["name"];
+            _nameMainPanel.text =  _nameUser.text = account["name"];
             _apointment.text = account.Property["position"];
         }
 

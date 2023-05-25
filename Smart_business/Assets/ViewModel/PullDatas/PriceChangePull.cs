@@ -24,6 +24,8 @@ namespace Assets.ViewModel.PullDatas
 
         public const string COLUMN_LINK = "idProduct";
 
+        public DateTime ReadingTime => DateTime.Parse( Columns[COLUMN_DATE]);
+
         public string ColumnDate => COLUMN_DATE;
 
         public const string TABLE = "priceChangePull";

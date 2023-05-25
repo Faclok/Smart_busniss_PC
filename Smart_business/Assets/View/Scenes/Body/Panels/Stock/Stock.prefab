@@ -8421,7 +8421,13 @@ MonoBehaviour:
   gameObject: {fileID: 0}
   _titleText: {fileID: 5568916410879931096}
   _descriptionText: {fileID: 5568916410448280595}
-  _icons: []
+  _icons:
+  - _name: in
+    _icon: {fileID: 21300000, guid: ee42f318f642dda43a87d879eb7a8912, type: 3}
+  - _name: out
+    _icon: {fileID: 21300000, guid: 01862204daa1eac42b614b7827cc5d63, type: 3}
+  - _name: LastActive
+    _icon: {fileID: 21300000, guid: 394a358d2885f7e41b9b5d67462bbc17, type: 3}
   _defaultIcon: {fileID: 21300000, guid: d2bb4fac4db5005469a0755d77a775f6, type: 3}
   _option: {fileID: 3716373753787241083}
   _verticalStock: {fileID: 1726345327524803271}
