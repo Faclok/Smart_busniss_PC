@@ -140,7 +140,7 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             for (int i = 0; i < _columnsInstantiante.Length; i++)
             {
                 _columnsInstantiante[i].rectTransform.sizeDelta = new Vector2(i * distance, values[i] * height);
-                _columnsInstantiante[i].color = UnityEngine.Random.ColorHSV(0f,1f, 0f, 1f, 0f, 1f, 1f, 1f);
+                _columnsInstantiante[i].color = Color.Lerp(Color.white, Color.yellow, values[i]);
             }
         }
 

@@ -17,9 +17,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
         [SerializeField]
         private GraphicLine _graphicLine;
 
-        [SerializeField]
-        private HelperAI _helperAI;
-
         [Header("Animation")]
         [SerializeField]
         private Animation _animation;
@@ -61,7 +58,6 @@ namespace Assets.View.Body.FullScreen.OptionsWindow.Review
             _animationGameObject.SetActive(false);
             _animation.Stop();
 
-            _helperAI.UpdateText(values);
             _graphicLine.UpdateDraw(values);
         }
 
